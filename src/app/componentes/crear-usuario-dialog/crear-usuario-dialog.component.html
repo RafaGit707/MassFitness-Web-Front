@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Crear Nuevo Usuario</h2>
+<mat-dialog-content>
+  <form [formGroup]="userForm" id="createUserForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre Completo</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error *ngIf="userForm.get('nombre')?.hasError('required')">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre de Usuario</mat-label>
+      <input matInput formControlName="nombre_usuario" required>
+      <mat-error *ngIf="userForm.get('nombre_usuario')?.hasError('required')">El nombre de usuario es requerido</mat-error>
+      <!-- Podrías añadir validación de unicidad aquí si es necesario -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo Electrónico</mat-label>
+      <input matInput type="email" formControlName="correo_electronico" required>
+      <mat-error *ngIf="userForm.get('correo_electronico')?.hasError('required')">El correo es requerido</mat-error>
+      <mat-error *ngIf="userForm.get('correo_electronico')?.hasError('email')">Formato de correo inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password" formControlName="contrasena" required minlength="6">
+      <mat-error *ngIf="userForm.get('contrasena')?.hasError('required')">La contraseña es requerida</mat-error>
+      <mat-error *ngIf="userForm.get('contrasena')?.hasError('minlength')">La contraseña debe tener al menos 6 caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+            <mat-option value="USUARIO">USUARIO</mat-option>
+            <mat-option value="ADMIN">ADMIN</mat-option>
+        </mat-select>
+         <mat-error *ngIf="userForm.get('rol')?.hasError('required')">El rol es requerido</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <!-- Usamos el id del form para submit externo y deshabilitamos si es inválido o loading -->
+  <button mat-raised-button color="primary" type="submit" form="createUserForm" [disabled]="userForm.invalid || isLoading">
+    {{ isLoading ? 'Guardando...' : 'Crear Usuario' }}
+  </button>
+</mat-dialog-actions>
+
+<!-- Estilo simple opcional -->
+<style>
+  .full-width { width: 100%; margin-bottom: 15px; }
+  mat-dialog-content { min-width: 350px; } /* Ajusta según necesites */
+</style>

@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+/* PROYECTO REALIZADO POR RAFAEL GALVÁN CALVO */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: white;
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+:root {
+    --header-height: 80px;
+    --scroll-y: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+ul li a {
+    color: white;
+    text-decoration: none;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,135 @@
+<h1>Panel de Administración</h1>
+
+<mat-tab-group animationDuration="1000ms">
+
+  <!-- Pestaña Usuarios -->
+  <mat-tab label="Usuarios">
+    <div class="tab-content">
+      <h2>Gestionar Usuarios</h2>
+      <button mat-raised-button color="primary" (click)="abrirModalCrearUsuario()" class="add-button">
+        <mat-icon>add</mat-icon> Crear Usuario
+      </button>
+
+      <div *ngIf="isLoadingUsuarios" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+
+      <table mat-table [dataSource]="usuarios" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingUsuarios && usuarios.length > 0">
+
+        <!-- Definición de Columnas -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let user"> {{user.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
+          <td mat-cell *matCellDef="let user"> {{user.nombre}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre_usuario">
+          <th mat-header-cell *matHeaderCellDef> Username </th>
+          <td mat-cell *matCellDef="let user"> {{user.nombre_usuario}} </td>
+        </ng-container>
+
+         <ng-container matColumnDef="correo_electronico">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let user"> {{user.correo_electronico}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef> Rol </th>
+          <td mat-cell *matCellDef="let user"> {{user.rol}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-icon-button color="primary" aria-label="Editar usuario" (click)="abrirModalEditarUsuario(user)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" aria-label="Eliminar usuario" (click)="eliminarUsuario(user.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Definición de Filas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsUsuarios"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsUsuarios;"></tr>
+      </table>
+
+      <div *ngIf="!isLoadingUsuarios && usuarios.length === 0" class="no-data">
+          No hay usuarios para mostrar.
+      </div>
+    </div>
+  </mat-tab>
+
+  <!-- Pestaña Entrenadores -->
+  <mat-tab label="Entrenadores">
+    <div class="tab-content">
+      <h2>Gestionar Entrenadores</h2>
+       <button mat-raised-button color="primary" (click)="abrirModalCrearEntrenador()" class="add-button">
+         <mat-icon>add</mat-icon> Crear Entrenador
+       </button>
+       <!-- Tabla para Entrenadores (similar a Usuarios) -->
+       <div *ngIf="isLoadingEntrenadores" class="loading-spinner">
+         <mat-spinner diameter="50"></mat-spinner>
+       </div>
+       <table mat-table [dataSource]="entrenadores" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingEntrenadores && entrenadores.length > 0">
+          <!-- Columnas: id, nombre_entrenador, especializacion, acciones -->
+           <ng-container matColumnDef="id"> <th mat-header-cell *matHeaderCellDef> ID </th> <td mat-cell *matCellDef="let item"> {{item.id}} </td> </ng-container>
+           <ng-container matColumnDef="nombre_entrenador"> <th mat-header-cell *matHeaderCellDef> Nombre </th> <td mat-cell *matCellDef="let item"> {{item.nombre_entrenador}} </td> </ng-container>
+           <ng-container matColumnDef="especializacion"> <th mat-header-cell *matHeaderCellDef> Especialización </th> <td mat-cell *matCellDef="let item"> {{item.especializacion}} </td> </ng-container>
+           <ng-container matColumnDef="acciones"> <th mat-header-cell *matHeaderCellDef> Acciones </th> <td mat-cell *matCellDef="let item"> <button mat-icon-button color="primary" (click)="abrirModalEditarEntrenador(item)"><mat-icon>edit</mat-icon></button> <button mat-icon-button color="warn" (click)="eliminarEntrenador(item.id)"><mat-icon>delete</mat-icon></button> </td> </ng-container>
+           <tr mat-header-row *matHeaderRowDef="displayedColumnsEntrenadores"></tr> <tr mat-row *matRowDef="let row; columns: displayedColumnsEntrenadores;"></tr>
+       </table>
+        <div *ngIf="!isLoadingEntrenadores && entrenadores.length === 0" class="no-data"> No hay entrenadores para mostrar. </div>
+    </div>
+  </mat-tab>
+
+  <!-- Pestaña Clases -->
+  <mat-tab label="Clases">
+    <div class="tab-content">
+      <h2>Gestionar Clases</h2>
+       <button mat-raised-button color="primary" (click)="abrirModalCrearClase()" class="add-button">
+         <mat-icon>add</mat-icon> Crear Clase
+       </button>
+       <!-- Tabla para Clases (similar a Usuarios) -->
+        <div *ngIf="isLoadingClases" class="loading-spinner"> <mat-spinner diameter="50"></mat-spinner> </div>
+        <table mat-table [dataSource]="clases" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingClases && clases.length > 0">
+          <!-- Columnas: id, nombre, capacidad_maxima, entrenador_id, acciones -->
+           <ng-container matColumnDef="id"> <th mat-header-cell *matHeaderCellDef> ID </th> <td mat-cell *matCellDef="let item"> {{item.id}} </td> </ng-container>
+           <ng-container matColumnDef="nombre"> <th mat-header-cell *matHeaderCellDef> Nombre </th> <td mat-cell *matCellDef="let item"> {{item.nombre}} </td> </ng-container>
+           <ng-container matColumnDef="capacidad_maxima"> <th mat-header-cell *matHeaderCellDef> Capacidad </th> <td mat-cell *matCellDef="let item"> {{item.capacidad_maxima}} </td> </ng-container>
+           <ng-container matColumnDef="entrenador_id"> <th mat-header-cell *matHeaderCellDef> ID Entrenador </th> <td mat-cell *matCellDef="let item"> {{item.entrenador_id}} </td> </ng-container> <!-- Podrías mostrar nombre del entrenador haciendo join o llamada extra -->
+           <ng-container matColumnDef="acciones"> <th mat-header-cell *matHeaderCellDef> Acciones </th> <td mat-cell *matCellDef="let item"> <button mat-icon-button color="primary" (click)="abrirModalEditarClase(item)"><mat-icon>edit</mat-icon></button> <button mat-icon-button color="warn" (click)="eliminarClase(item.id)"><mat-icon>delete</mat-icon></button> </td> </ng-container>
+           <tr mat-header-row *matHeaderRowDef="displayedColumnsClases"></tr> <tr mat-row *matRowDef="let row; columns: displayedColumnsClases;"></tr>
+        </table>
+         <div *ngIf="!isLoadingClases && clases.length === 0" class="no-data"> No hay clases para mostrar. </div>
+    </div>
+  </mat-tab>
+
+  <!-- Pestaña Espacios -->
+  <mat-tab label="Espacios">
+    <div class="tab-content">
+      <h2>Gestionar Espacios</h2>
+       <button mat-raised-button color="primary" (click)="abrirModalCrearEspacio()" class="add-button">
+         <mat-icon>add</mat-icon> Crear Espacio
+       </button>
+       <!-- Tabla para Espacios (similar a Usuarios) -->
+        <div *ngIf="isLoadingEspacios" class="loading-spinner"> <mat-spinner diameter="50"></mat-spinner> </div>
+        <table mat-table [dataSource]="espacios" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingEspacios && espacios.length > 0">
+           <!-- Columnas: id, nombre, capacidad_maxima, entrenador_id, acciones -->
+           <ng-container matColumnDef="id"> <th mat-header-cell *matHeaderCellDef> ID </th> <td mat-cell *matCellDef="let item"> {{item.id}} </td> </ng-container>
+           <ng-container matColumnDef="nombre"> <th mat-header-cell *matHeaderCellDef> Nombre </th> <td mat-cell *matCellDef="let item"> {{item.nombre}} </td> </ng-container>
+           <ng-container matColumnDef="capacidad_maxima"> <th mat-header-cell *matHeaderCellDef> Capacidad </th> <td mat-cell *matCellDef="let item"> {{item.capacidad_maxima}} </td> </ng-container>
+           <ng-container matColumnDef="entrenador_id"> <th mat-header-cell *matHeaderCellDef> ID Entrenador </th> <td mat-cell *matCellDef="let item"> {{item.entrenador_id}} </td> </ng-container> <!-- Podrías mostrar nombre del entrenador -->
+           <ng-container matColumnDef="acciones"> <th mat-header-cell *matHeaderCellDef> Acciones </th> <td mat-cell *matCellDef="let item"> <button mat-icon-button color="primary" (click)="abrirModalEditarEspacio(item)"><mat-icon>edit</mat-icon></button> <button mat-icon-button color="warn" (click)="eliminarEspacio(item.id)"><mat-icon>delete</mat-icon></button> </td> </ng-container>
+           <tr mat-header-row *matHeaderRowDef="displayedColumnsEspacios"></tr> <tr mat-row *matRowDef="let row; columns: displayedColumnsEspacios;"></tr>
+        </table>
+        <div *ngIf="!isLoadingEspacios && espacios.length === 0" class="no-data"> No hay espacios para mostrar. </div>
+    </div>
+  </mat-tab>
+
+</mat-tab-group>

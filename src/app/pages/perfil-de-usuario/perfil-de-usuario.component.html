@@ -1,0 +1,28 @@
+<div class="profile-container">
+    <ng-container *ngIf="!isLoading; else loadingProfile">
+    <div *ngIf="usuario; else noUser">
+        <h1>Perfil de Usuario</h1>
+        <div class="profile-details">
+        <p><strong>ID:</strong> {{ usuario.id }}</p>
+        <p><strong>Nombre Completo:</strong> {{ usuario.nombre }}</p>
+        <p><strong>Nombre de Usuario:</strong> {{ usuario.nombre_usuario }}</p>
+        <p><strong>Correo Electrónico:</strong> {{ usuario.correo_electronico }}</p>
+        <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+        <p><strong>Miembro Desde:</strong> {{ usuario.created_at | date:'longDate' }}</p>
+        </div>
+        <button mat-raised-button color="primary" (click)="actualizarPerfil()">
+        Editar Perfil (Próximamente)
+        </button>
+    </div>
+    <ng-template #noUser>
+        <p>No se pudo cargar la información del usuario.</p>
+    </ng-template>
+    </ng-container>
+
+    <ng-template #loadingProfile>
+    <div class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Cargando perfil...</p>
+    </div>
+    </ng-template>
+</div>

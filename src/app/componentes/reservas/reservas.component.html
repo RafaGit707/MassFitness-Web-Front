@@ -1,0 +1,22 @@
+<h2>Clases Disponibles</h2>
+<ul>
+  <li *ngFor="let clase of clases">
+    {{ clase.nombre }} - Capacidad: {{ clase.capacidad_maxima }}
+  </li>
+</ul>
+
+<h2>Espacios Disponibles</h2>
+<ul>
+  <li *ngFor="let espacio of espacios">
+    {{ espacio.nombre }} - Capacidad: {{ espacio.capacidad_maxima }}
+  </li>
+</ul>
+
+<button (click)="crearReservaClase()">Reservar Clase</button>
+
+<h2>Reservas Realizadas</h2>
+<ul>
+  <li *ngFor="let r of reservas">
+    {{ r.tipo_reserva }} - {{ r.horario_reserva }}
+  </li>
+</ul>

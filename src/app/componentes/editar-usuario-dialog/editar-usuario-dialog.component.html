@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Editar Usuario (ID: {{ data.id }})</h2>
+<mat-dialog-content>
+  <form [formGroup]="userForm" id="editUserForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre Completo</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error *ngIf="userForm.get('nombre')?.hasError('required')">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre de Usuario</mat-label>
+      <input matInput formControlName="nombre_usuario" required>
+      <mat-error *ngIf="userForm.get('nombre_usuario')?.hasError('required')">El nombre de usuario es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo Electrónico</mat-label>
+      <input matInput type="email" formControlName="correo_electronico" required>
+      <mat-error *ngIf="userForm.get('correo_electronico')?.hasError('required')">El correo es requerido</mat-error>
+      <mat-error *ngIf="userForm.get('correo_electronico')?.hasError('email')">Formato de correo inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nueva Contraseña (opcional)</mat-label>
+      <input matInput type="password" formControlName="contrasena" minlength="6" placeholder="Dejar en blanco para no cambiar">
+      <mat-error *ngIf="userForm.get('contrasena')?.hasError('minlength')">La contraseña debe tener al menos 6 caracteres</mat-error>
+       <mat-hint>Deja en blanco para mantener la contraseña actual.</mat-hint>
+    </mat-form-field>
+
+     <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol" required>
+            <mat-option value="USUARIO">USUARIO</mat-option>
+            <mat-option value="ADMIN">ADMIN</mat-option>
+        </mat-select>
+         <mat-error *ngIf="userForm.get('rol')?.hasError('required')">El rol es requerido</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" type="submit" form="editUserForm" [disabled]="userForm.invalid || isLoading">
+     {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+  </button>
+</mat-dialog-actions>
+
+<!-- Estilo simple opcional -->
+<style>
+  .full-width { width: 100%; margin-bottom: 15px; }
+  mat-dialog-content { min-width: 350px; }
+</style>

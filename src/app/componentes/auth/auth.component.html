@@ -1,0 +1,144 @@
+
+<div class="container-header" #containerHeader>
+    <div class="div-fondo"></div>
+
+    <section class="img-titulo">
+        <img src="../assets/massfitness_nobackground.png" class="img-top" alt="Imagen de fondo arriba" loading="lazy">
+        <h1 class="titulo-top">Bienvenidos a MassFitness</h1>
+    </section>
+
+    <header #headerElement>
+        <div class="topheader">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../assets/massfitness_nobackground.png" class="img-logo" loading="lazy">
+                </a>
+                <nav class="nav-enlaces">
+                    <ul>
+                        <li><a href="enrrenadores.html">Blog</a></li>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a class="enlaces" href = #contacto>Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <nav>
+                <ul>
+                    <li *ngIf="!loggedIn">
+                        <button type="button" class="button-iniciar-sesion" id="abrir-login" (click)="openLogin()">
+                        Iniciar Sesión
+                        </button>
+                    </li>
+
+                    <li class="user-sesion" *ngIf="loggedIn">
+                        <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span>
+                        <button (click)="logout()" type="button" class="button-cerrar-sesion">Cerrar sesión</button>
+                        <a *ngIf="isAdmin" routerLink="/admin-dashboard" class="button-iniciar-sesion" style="color: yellow; font-size: 14px;">Admin Panel</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</div>
+
+<div id="mostrar" class="container1" *ngIf="showLoginModal">
+    <div class="fondo"></div>
+    <div class="contenido">
+        <form class="form-container" (ngSubmit)="onLoginSubmit(loginForm)" #loginForm="ngForm">
+        <h1>Iniciar sesión</h1>
+        <div class="form-group">
+            <label for="login-username">Nombre de usuario</label>
+            <input type="text" id="login-username" name="nombre_usuario" autocomplete="off" [(ngModel)]="loginData.nombre_usuario" required #loginUsernameInput="ngModel" [ngClass]="{'input-error': loginForm.submitted && loginUsernameInput.invalid}">
+            <div *ngIf="loginForm.submitted && loginUsernameInput.invalid" class="error-message">
+                Nombre de usuario requerido.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="login-password">Contraseña</label>
+            <input type="password" id="login-password" name="contrasena" autocomplete="off" [(ngModel)]="loginData.contrasena" required #loginPasswordInput="ngModel" [ngClass]="{'input-error': loginForm.submitted && loginPasswordInput.invalid}">
+             <div *ngIf="loginForm.submitted && loginPasswordInput.invalid" class="error-message">
+                Contraseña requerida.
+            </div>
+        </div>
+        <div *ngIf="loginError" class="error-message">
+            {{ loginError }}
+        </div>
+        <button class="submit-btn" type="submit" [disabled]="isLoadingLogin || !loginForm.valid">
+            <span *ngIf="isLoadingLogin" class="spinner"></span>
+            {{ isLoadingLogin ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+        </button>
+        <p class="cuenta_p">¿No tienes cuenta?  <a href="#registro" class="registrarse" (click)="openRegister()">Registrarse</a></p>
+        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.png" class="X1" id="X1" loading="lazy"></a>
+        </form>
+    </div>
+</div>
+    
+<div id="registro" class="container1" *ngIf="showRegisterModal">
+    <div class="fondo"></div>
+    <div class="contenido">
+        <form class="form-container" (ngSubmit)="onRegisterSubmit(registroForm)" #registroForm="ngForm">
+        <h1>Registrarse</h1>
+        <div class="form-group">
+            <label for="register-nombre">Nombre</label>
+            <input type="text" id="register-nombre" name="nombre" autocomplete="off" [(ngModel)]="registroData.nombre" required #regNombreInput="ngModel" [ngClass]="{'input-error': registroForm.submitted && regNombreInput.invalid}">
+             <div *ngIf="registroForm.submitted && regNombreInput.invalid" class="error-message">
+                    Nombre requerido.
+             </div>
+        </div>
+        <div class="form-group">
+            <label for="register-email">Correo electrónico</label>
+            <input type="email" id="register-email" name="correo_electronico" autocomplete="off" [(ngModel)]="registroData.correo_electronico" required email #regEmailInput="ngModel" [ngClass]="{'input-error': registroForm.submitted && regEmailInput.invalid}">
+             <div *ngIf="registroForm.submitted && regEmailInput.invalid" class="error-message">
+                <span *ngIf="regEmailInput.errors?.['required']">Correo requerido.</span>
+                <span *ngIf="regEmailInput.errors?.['email']">Correo inválido.</span>
+             </div>
+        </div>
+        <div class="form-group">
+            <label for="register-username">Nombre de usuario</label>
+            <input type="text" id="register-username" name="nombre_usuario" autocomplete="off" [(ngModel)]="registroData.nombre_usuario" required #regUsernameInput="ngModel" [ngClass]="{'input-error': registroForm.submitted && regUsernameInput.invalid}">
+             <div *ngIf="registroForm.submitted && regUsernameInput.invalid" class="error-message">
+                Nombre de usuario requerido.
+             </div>
+        </div>
+        <div class="form-group">
+            <label for="register-password">Contraseña</label>
+            <input type="password" id="register-password" name="contrasena" autocomplete="off" [(ngModel)]="registroData.contrasena" required
+                   pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?_])(?!\s)[a-zA-Z\d#$@!%&*?_]{8,16}$"
+                   (input)="checkPasswordStrength($any($event.target).value)"
+                   #regPasswordInput="ngModel"
+                   [ngClass]="{'input-error': (registroForm.submitted || regPasswordInput.touched) && regPasswordInput.invalid}">
+             <div *ngIf="(registroForm.submitted || regPasswordInput.touched) && regPasswordInput.errors?.['required']" class="error-message">
+                Contraseña requerida.
+            </div>
+             <div *ngIf="(registroForm.submitted || regPasswordInput.touched) && regPasswordInput.errors?.['pattern']" class="error-message">
+               La contraseña no cumple los requisitos.
+            </div>
+        </div>
+        <div *ngIf="registerError" class="error-message">
+            {{ registerError }}
+        </div>
+        <div id="error-message" class="password-rules" *ngIf="registroForm.controls['contrasena']?.touched || registroForm.controls['contrasena']?.value">
+            <p class="message" [ngClass]="{'valid': passwordValidation.length, 'invalid': !passwordValidation.length}">
+                <img class="X2" [src]="passwordValidation.length ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe tener entre 8 y 16 caracteres
+            </p>
+            <p class="message" [ngClass]="{'valid': passwordValidation.lowercase, 'invalid': !passwordValidation.lowercase}">
+                <img class="X2" [src]="passwordValidation.lowercase ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos una letra minúscula
+            </p>
+            <p class="message" [ngClass]="{'valid': passwordValidation.uppercase, 'invalid': !passwordValidation.uppercase}">
+                <img class="X2" [src]="passwordValidation.uppercase ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos una letra mayúscula
+            </p>
+            <p class="message" [ngClass]="{'valid': passwordValidation.number, 'invalid': !passwordValidation.number}">
+                <img class="X2" [src]="passwordValidation.number ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos un número
+            </p>
+            <p class="message" [ngClass]="{'valid': passwordValidation.special, 'invalid': !passwordValidation.special}">
+                <img class="X2" [src]="passwordValidation.special ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos un carácter especial (#$&#64;!%&amp;*?_)
+            </p>
+        </div>
+        <button class="submit-btn" type="submit" [disabled]="isLoadingRegister || !registroForm.valid">
+            <span *ngIf="isLoadingRegister" class="spinner"></span>
+           {{ isLoadingRegister ? 'Cargando...' : 'Registrarse' }}
+       </button>
+        <p class="cuenta_p">¿Tienes cuenta? <a href="#mostrar" class="registrarse" (click)="openLogin()">Iniciar Sesion</a></p>
+        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.png" class="X1" id="X1"></a>
+        </form>
+    </div>
+</div>

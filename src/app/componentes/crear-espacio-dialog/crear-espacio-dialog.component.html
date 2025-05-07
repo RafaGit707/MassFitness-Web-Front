@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Crear Nuevo Espacio</h2>
+<mat-dialog-content>
+  <form [formGroup]="espacioForm" id="createEspacioForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre del Espacio</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error *ngIf="espacioForm.get('nombre')?.hasError('required')">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Capacidad Máxima</mat-label>
+      <input matInput type="number" formControlName="capacidad_maxima" required min="1">
+      <mat-error *ngIf="espacioForm.get('capacidad_maxima')?.hasError('required')">La capacidad es requerida</mat-error>
+      <mat-error *ngIf="espacioForm.get('capacidad_maxima')?.hasError('min')">La capacidad debe ser al menos 1</mat-error>
+      <mat-error *ngIf="espacioForm.get('capacidad_maxima')?.hasError('pattern')">Solo números positivos</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Entrenador Designado (Opcional)</mat-label> <!-- Ajusta si es requerido o no -->
+      <mat-select formControlName="entrenador_id" > <!-- Quita 'required' si es opcional -->
+         <mat-option [value]="null">Ninguno</mat-option> <!-- Opción para no asignar entrenador -->
+        <mat-option *ngFor="let entrenador of entrenadores$ | async" [value]="entrenador.id">
+          {{ entrenador.nombre_entrenador }}
+        </mat-option>
+      </mat-select>
+      <!-- <mat-error *ngIf="espacioForm.get('entrenador_id')?.hasError('required')">Debe seleccionar un entrenador</mat-error> -->
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" type="submit" form="createEspacioForm" [disabled]="espacioForm.invalid || isLoading">
+    {{ isLoading ? 'Guardando...' : 'Crear Espacio' }}
+  </button>
+</mat-dialog-actions>
+
+<style>
+  .full-width { width: 100%; margin-bottom: 15px; }
+  mat-dialog-content { min-width: 350px; }
+</style>

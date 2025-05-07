@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Crear Nuevo Entrenador</h2>
+<mat-dialog-content>
+  <form [formGroup]="entrenadorForm" id="createEntrenadorForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre del Entrenador</mat-label>
+      <input matInput formControlName="nombre_entrenador" required>
+      <mat-error *ngIf="entrenadorForm.get('nombre_entrenador')?.hasError('required')">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Especialización</mat-label>
+      <input matInput formControlName="especializacion" required>
+      <mat-error *ngIf="entrenadorForm.get('especializacion')?.hasError('required')">La especialización es requerida</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" type="submit" form="createEntrenadorForm" [disabled]="entrenadorForm.invalid || isLoading">
+    {{ isLoading ? 'Guardando...' : 'Crear Entrenador' }}
+  </button>
+</mat-dialog-actions>
+
+<style>
+  .full-width { width: 100%; margin-bottom: 15px; }
+  mat-dialog-content { min-width: 350px; }
+</style>

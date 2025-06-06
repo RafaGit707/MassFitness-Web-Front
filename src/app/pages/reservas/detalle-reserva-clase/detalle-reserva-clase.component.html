@@ -1,0 +1,87 @@
+<div class="reserva-detail-container" *ngIf="!isLoading; else loadingPage">
+  <ng-container *ngIf="clase; else claseNotFound">
+    <div class="header-section">
+      <button mat-icon-button routerLink="/reservar/clases" aria-label="Volver a la lista de clases" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Reservar Clase: {{ clase.nombre }}</h1>
+    </div>
+
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>{{ clase.nombre }}</mat-card-title>
+        <mat-card-subtitle *ngIf="entrenador">Con {{ entrenador.nombre_entrenador }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Capacidad Máxima:</strong> {{ clase.capacidad_maxima }} personas</p>
+        <p *ngIf="entrenador"><strong>Especialización del Entrenador:</strong> {{ entrenador.especializacion }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="scheduler-card">
+      <mat-card-title>Selecciona Fecha y Hora</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="datepicker-field">
+          <mat-label>Fecha de la reserva</mat-label>
+          <input matInput [matDatepicker]="picker" (dateChange)="onFechaSeleccionada($event)" [(ngModel)]="fechaSeleccionada" readonly placeholder="Elige una fecha" [min]="minDate">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="!fechaSeleccionada">Debes seleccionar una fecha.</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="isHorariosLoading" class="horarios-loading">
+            <mat-spinner diameter="30"></mat-spinner> <p>Cargando horarios...</p>
+        </div>
+
+        <div *ngIf="!isHorariosLoading && fechaSeleccionada && horariosDisponibles.length > 0" class="horarios-container">
+          <p><strong>Horarios Disponibles para {{ fechaSeleccionada | date:'EEEE, d MMMM y' }}:</strong></p>
+          <mat-chip-listbox aria-label="Selección de hora" class="hora-selector" multiple="false">
+            <mat-chip-option *ngFor="let horario of horariosDisponibles"
+                             [value]="horario"
+                             [disabled]="!horario.disponible"
+                             (click)="seleccionarHora(horario)"
+                             [selected]="horario === horarioSeleccionado"
+                             [color]="horario.disponible ? (horario === horarioSeleccionado ? 'primary' : 'accent') : undefined"
+                             [ngClass]="{'chip-no-disponible': !horario.disponible, 'chip-seleccionado': horario === horarioSeleccionado && horario.disponible }">
+              {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+              <span *ngIf="horario.capacidad_maxima_slot !== undefined && horario.capacidad_restante !== undefined" class="chip-capacidad-info">
+                ({{ horario.capacidad_maxima_slot - horario.capacidad_restante }} / {{ horario.capacidad_maxima_slot }})
+              </span>
+              <span *ngIf="!horario.disponible" class="chip-no-disponible-text"> (Lleno)</span>
+              <mat-icon *ngIf="horario === horarioSeleccionado && horario.disponible" class="chip-selected-icon">check_circle</mat-icon>
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+
+        <div *ngIf="!isHorariosLoading && fechaSeleccionada && horariosDisponibles.length === 0" class="no-horarios">
+          <p>No hay horarios disponibles para la fecha seleccionada. Por favor, intenta con otra fecha.</p>
+        </div>
+        <div *ngIf="!isHorariosLoading && !fechaSeleccionada" class="no-horarios">
+          <p>Por favor, selecciona una fecha para ver los horarios.</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" (click)="confirmarReserva()" [disabled]="!horarioSeleccionado || !horarioSeleccionado.disponible || isLoading">
+          <mat-icon>event_available</mat-icon> Confirmar Reserva
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </ng-container> <!-- Fin *ngIf="clase" -->
+
+  <ng-template #claseNotFound>
+    <div class="not-found-container">
+      <h2>Clase no encontrada</h2>
+      <p>La clase que buscas no existe o no está disponible.</p>
+      <button mat-stroked-button routerLink="/reservar/clases">Volver a la lista de clases</button>
+    </div>
+  </ng-template>
+
+</div> <!-- Fin reserva-detail-container -->
+
+<ng-template #loadingPage>
+  <div class="page-loading-spinner">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>Cargando detalles de la clase...</p>
+  </div>
+</ng-template>

@@ -32,6 +32,20 @@ import { EditarClaseDialogComponent } from './componentes/editar-clase-dialog/ed
 import { EditarEspacioDialogComponent } from './componentes/editar-espacio-dialog/editar-espacio-dialog.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { PerfilDeUsuarioComponent } from './pages/perfil-de-usuario/perfil-de-usuario.component';
+import { ScrollVideoComponent } from './componentes/scroll-video/scroll-video.component';
+import { ScrollVideoBoxeoComponent } from './componentes/scroll-video-boxeo/scroll-video-boxeo.component';
+import { EditarMiPerfilDialogComponent } from './componentes/editar-mi-perfil-dialog/editar-mi-perfil-dialog.component';
+import { SeleccionReservaComponent } from './pages/reservas/seleccion-reserva/seleccion-reserva.component';
+import { ListaClasesComponent } from './pages/reservas/lista-clases/lista-clases.component';
+import { ListaSalasComponent } from './pages/reservas/lista-salas/lista-salas.component';
+import { DetalleReservaClaseComponent } from './pages/reservas/detalle-reserva-clase/detalle-reserva-clase.component';
+import { DetalleReservaSalaComponent } from './pages/reservas/detalle-reserva-sala/detalle-reserva-sala.component';
+import { MatListModule } from '@angular/material/list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { GestionarClaseHorarioDialogComponent } from './componentes/gestionar-clase-horario-dialog/gestionar-clase-horario-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +63,16 @@ import { PerfilDeUsuarioComponent } from './pages/perfil-de-usuario/perfil-de-us
     CrearClaseDialogComponent,
     EditarClaseDialogComponent,
     EditarEspacioDialogComponent,
-    PerfilDeUsuarioComponent
+    PerfilDeUsuarioComponent,
+    ScrollVideoComponent,
+    ScrollVideoBoxeoComponent,
+    EditarMiPerfilDialogComponent,
+    SeleccionReservaComponent,
+    ListaClasesComponent,
+    ListaSalasComponent,
+    DetalleReservaClaseComponent,
+    DetalleReservaSalaComponent,
+    GestionarClaseHorarioDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +91,12 @@ import { PerfilDeUsuarioComponent } from './pages/perfil-de-usuario/perfil-de-us
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule,
+    MatDatepickerModule,
+    MatNativeDateModule, 
+    MatChipsModule,
+    MatCardModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

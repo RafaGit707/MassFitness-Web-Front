@@ -16,14 +16,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Entrenador Designado (Opcional)</mat-label>
-      <mat-select formControlName="entrenador_id">
-        <mat-option [value]="null">Ninguno</mat-option> <!-- Opción para desasignar entrenador -->
+      <mat-label>Entrenador Asignado</mat-label>
+      <mat-select formControlName="entrenador_id"  required>
         <mat-option *ngFor="let entrenador of entrenadores$ | async" [value]="entrenador.id">
           {{ entrenador.nombre_entrenador }}
         </mat-option>
       </mat-select>
-      <!-- No se pone error de 'required' aquí porque es opcional -->
+      <mat-error *ngIf="espacioForm.get('entrenador_id')?.hasError('required')">Debe seleccionar un entrenador</mat-error>
     </mat-form-field>
   </form>
 </mat-dialog-content>

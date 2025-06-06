@@ -1,0 +1,146 @@
+/* :host {
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+} */
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    display: block;
+    will-change: transform;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.scroll-container {
+    position: relative;
+    overflow-x: hidden;
+    background: transparent;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    padding: 2rem;
+    justify-content: center;
+    color: white;
+}
+
+.parallax-container1 {
+    position: sticky;
+    height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.parallax-text1 {
+    position: sticky;
+    top: 30dvh;
+    background: white;
+    color: black;
+    margin: 60px;
+    padding: 50px 80px 50px 80px;   
+    text-align: left;
+    max-width: 700px;
+    font-size: 1.3rem;
+    max-width: 550px;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+.parallax-text1 h2 {
+    margin-bottom: 24px;
+}
+
+.botones-reserva {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.button-reservar {
+    padding: 8px 12px 8px 12px;
+    background: none;
+    font-size: 14px;
+    margin-top: 20px;
+    color: black;
+    font-weight: 700;
+    border: 2px solid black;
+    width: fit-content;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button-reservar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.9);
+}
+
+@media (max-width: 1024px) {
+
+    .parallax-text1 h2 {
+        font-size: 1.5rem;
+    }
+    
+    .parallax-text1 {
+        padding: 40px 60px;
+        margin: 40px;
+    }
+
+    .botones-reserva {
+        gap: 30px;
+    }
+
+    .button-reservar {
+        padding: 7px 11px 7px 11px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .parallax-text1 {
+        padding: 30px 40px;
+        font-size: 1.1rem;
+        margin: 30px;
+    }
+    
+    .botones-reserva {
+        gap: 20px;
+    }
+    
+    .button-reservar {
+        padding: 6px 10px 6px 10px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .parallax-text1 {
+        padding: 20px 30px;
+        font-size: 1rem;
+        margin: 20px;
+    }
+
+    .botones-reserva {
+        gap: 16px;
+    }
+    
+    .button-reservar {
+        padding: 5px 8px 5px 8px;
+    }
+
+}

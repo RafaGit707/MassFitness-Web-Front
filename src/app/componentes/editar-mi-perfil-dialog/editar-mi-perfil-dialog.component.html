@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Editar Mi Perfil</h2>
+<mat-dialog-content>
+  <form [formGroup]="perfilForm" id="editMyProfileForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre Completo</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error *ngIf="perfilForm.get('nombre')?.hasError('required')">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre de Usuario</mat-label>
+      <input matInput formControlName="nombre_usuario" required>
+      <mat-error *ngIf="perfilForm.get('nombre_usuario')?.hasError('required')">El nombre de usuario es requerido</mat-error>
+      <!-- Podrías necesitar validación de unicidad aquí, ignorando el propio usuario -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo Electrónico</mat-label>
+      <input matInput type="email" formControlName="correo_electronico" required>
+      <mat-error *ngIf="perfilForm.get('correo_electronico')?.hasError('required')">El correo es requerido</mat-error>
+      <mat-error *ngIf="perfilForm.get('correo_electronico')?.hasError('email')">Formato de correo inválido</mat-error>
+      <!-- Podrías necesitar validación de unicidad aquí, ignorando el propio usuario -->
+    </mat-form-field>
+
+    <!-- Para cambiar contraseña, es mejor un flujo/diálogo separado
+    <p>
+        <a href="javascript:void(0)" (click)="abrirDialogoCambiarContrasena()">Cambiar Contraseña</a>
+    </p> -->
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" type="submit" form="editMyProfileForm" [disabled]="perfilForm.invalid || isLoading">
+    {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+  </button>
+</mat-dialog-actions>
+
+<style>
+  .full-width { width: 100%; margin-bottom: 15px; }
+  mat-dialog-content { min-width: 350px; }
+</style>

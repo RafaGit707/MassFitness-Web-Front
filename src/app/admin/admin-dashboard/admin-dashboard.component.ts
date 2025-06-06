@@ -15,6 +15,8 @@ import { CrearClaseDialogComponent } from 'src/app/componentes/crear-clase-dialo
 import { EditarClaseDialogComponent } from 'src/app/componentes/editar-clase-dialog/editar-clase-dialog.component';
 import { EditarEspacioDialogComponent } from 'src/app/componentes/editar-espacio-dialog/editar-espacio-dialog.component';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { GestionarClaseHorarioDialogComponent } from 'src/app/componentes/gestionar-clase-horario-dialog/gestionar-clase-horario-dialog.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -204,15 +206,31 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   eliminarEntrenador(id: number): void {
-     this.abrirDialogoConfirmacion(`¿Estás seguro de eliminar el entrenador con ID ${id}?`)
-       .subscribe(confirmado => {
-         if (confirmado) {
-           this.adminService.deleteEntrenador(id).subscribe({ // Asume que existe este método
-             next: () => { this.mostrarMensaje('Entrenador eliminado'); this.cargarEntrenadores(); },
-             error: (err) => { console.error(err); this.mostrarError('Error al eliminar entrenador'); }
-           });
-         }
-       });
+    this.abrirDialogoConfirmacion(`¿Estás seguro de eliminar el entrenador con ID ${id}?`)
+      .subscribe(confirmado => {
+        if (confirmado) {
+          this.isLoadingEntrenadores = true;
+          this.adminService.deleteEntrenador(id).subscribe({
+            next: () => {
+              this.isLoadingEntrenadores = false;
+              this.mostrarMensaje('Entrenador eliminado correctamente');
+              this.cargarEntrenadores();
+            },
+            error: (err: HttpErrorResponse) => { // Tipar como HttpErrorResponse
+              this.isLoadingEntrenadores = false;
+              console.error(`Error eliminando entrenador ID ${id} (desde componente):`, err);
+
+              let displayMessage = 'No se pudo eliminar el entrenador.';
+              if (err.error && typeof err.error.message === 'string') {
+                displayMessage = err.error.message; // Mensaje específico del backend
+              } else if (err.message) {
+                displayMessage = err.message;
+              }
+              this.mostrarError(displayMessage);
+            }
+          });
+        }
+      });
   }
 
   // ---- Clases ----
@@ -227,15 +245,77 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   eliminarClase(id: number): void {
-     this.abrirDialogoConfirmacion(`¿Estás seguro de eliminar la clase con ID ${id}?`)
-       .subscribe(confirmado => {
-         if (confirmado) {
-           this.adminService.deleteClase(id).subscribe({ // Asume que existe este método
-             next: () => { this.mostrarMensaje('Clase eliminada'); this.cargarClases(); },
-             error: (err) => { console.error(err); this.mostrarError('Error al eliminar clase'); }
-           });
-         }
-       });
+  this.abrirDialogoConfirmacion(`¿Estás seguro de eliminar la clase con ID ${id}? Esta acción es irreversible.`)
+    .subscribe(confirmado => {
+      if (confirmado) {
+        this.isLoadingClases = true;
+        this.adminService.deleteClase(id).subscribe({ // Primera llamada (sin force)
+          next: () => {
+            this.isLoadingClases = false;
+            this.mostrarMensaje('Clase eliminada correctamente.');
+            this.cargarClases();
+          },
+          error: (err: HttpErrorResponse) => {
+            this.isLoadingClases = false;
+            console.error(`Error eliminando clase ID ${id}:`, err);
+            if (err.status === 422 && err.error && err.error.requires_force) {
+              // El backend indica que hay dependencias y requiere confirmación para forzar
+              this.abrirDialogoConfirmacion(err.error.detailed_message || 'Esta clase tiene dependencias. ¿Forzar eliminación?')
+                .subscribe(forceConfirmed => {
+                  if (forceConfirmed) {
+                    this.isLoadingClases = true;
+                    // Segunda llamada, AHORA con el parámetro force=true
+                    this.adminService.deleteClase(id, true).subscribe({ // Asume que deleteClase puede tomar 'force'
+                      next: () => {
+                        this.isLoadingClases = false;
+                        this.mostrarMensaje('Clase y sus dependencias eliminadas correctamente.');
+                        this.cargarClases();
+                      },
+                      error: (forceErr: HttpErrorResponse) => {
+                        this.isLoadingClases = false;
+                        const message = (forceErr.error && typeof forceErr.error.message === 'string')
+                                          ? forceErr.error.message
+                                          : 'No se pudo forzar la eliminación de la clase.';
+                        this.mostrarError(message);
+                      }
+                    });
+                  }
+                });
+            } else {
+              // Otro tipo de error
+              const message = (err.error && typeof err.error.message === 'string')
+                                ? err.error.message
+                                : 'Error al eliminar la clase.';
+              this.mostrarError(message);
+            }
+          }
+        });
+      }
+    });
+}
+
+   // Para mostrar nombres de entrenadores en la tabla de clases
+  getNombreEntrenador(entrenadorId: number): string | undefined {
+    const entrenador = this.entrenadores.find(e => e.id === entrenadorId);
+    return entrenador ? entrenador.nombre_entrenador : undefined;
+  }
+
+  // ... (tus métodos CRUD existentes para clases) ...
+
+  abrirModalGestionarHorarios(clase: Clase): void {
+    console.log('Gestionar horarios para la clase:', clase);
+    const dialogRef = this.dialog.open(GestionarClaseHorarioDialogComponent, {
+      width: '700px', // Un poco más ancho para la gestión de horarios
+      data: { clase: clase } // Pasamos la clase al diálogo
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'saved') { // Si el diálogo indica que se guardaron cambios
+        this.mostrarMensaje('Horarios actualizados.');
+        // No es necesario recargar todas las clases, solo los horarios si se muestran aquí.
+        // Por ahora, un mensaje es suficiente.
+      }
+    });
   }
 
   // ---- Espacios ----

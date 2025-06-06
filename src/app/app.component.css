@@ -1,18 +1,63 @@
 main {
-    background-color: white;
     min-height: calc(100vh - var(--header-height));
+    z-index: 0;
+    position: relative;
+    background-color: white;
 }
 
-/* MEDIA */
+body, app-footer {
+    position: relative;
+    z-index: 0;
+}
 
-.img-coche {
+.scroll-container {
+    position: relative;
+    overflow-x: hidden;
+    background: transparent;
+    z-index: -1;
+}
+
+app-scroll-video {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: fit-content;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
 }
 
-.img-logo-footer {
-    width: auto;
-    height: 80px;
+.content {
+    position: relative;
+    padding: 2rem;
+    justify-content: center;
+    color: white;
+}
+
+.parallax-container1 {
+    position: sticky;
+    height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.parallax-text1 {
+    position: sticky;
+    top: 30vh;
+    background: white;
+    color: black;
+    margin: 60px;
+    padding: 50px 80px 50px 80px;   
+    text-align: left;
+    max-width: 700px;
+    font-size: 1.3rem;
+    max-width: 550px;
+    pointer-events: auto;
+    overflow: hidden;
 }
 
 /* INTRO 1 */
@@ -186,9 +231,9 @@ main {
     align-items: flex-start;
     justify-content: center;
     text-align: center;
-    background-image: url("../assets/audi-x2.jpg");
+    background-image: url("../assets/fondosobre.jpg");
     background-size: cover;
-    background-position: center calc(100% + var(--scroll-y) * 0.6px);
+    background-position: center calc(100% + var(--scroll-y) * 0.7px);
     will-change: transform;
 }
 
@@ -248,13 +293,13 @@ main {
 }
 
 .img-tecnologia1 {
-    background-image: url("../assets/audi-rs7-1.jpg");
+    background-image: url("../assets/fondosobre.jpg");
     background-position: center left;
     will-change: transform;
 }
 
 .img-tecnologia2 {
-    background-image: url("../assets/audi-rs4-interior.jpg");
+    background-image: url("../assets/fondosobre.jpg");
     background-position: center right;
     will-change: transform;
 }
@@ -294,7 +339,7 @@ main {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    background-image: url("../assets/audi-rs7-2.webp");
+    background-image: url("../assets/fondosobre.jpg");
     background-size: cover;
     background-position: center calc(100% + var(--scroll-y) * 0.7px);
     will-change: transform;
@@ -313,7 +358,7 @@ main {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    background-image: url("../assets/audi-rs5.webp");
+    background-image: url("../assets/fondosobre.jpg");
     background-size: cover;
     background-position: center calc(100% + var(--scroll-y) * 0.9px);
     will-change: transform;

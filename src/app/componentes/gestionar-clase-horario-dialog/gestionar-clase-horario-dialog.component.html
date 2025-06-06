@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>Gestionar Horarios para: {{ clase.nombre }}</h2>
+<mat-dialog-content class="dialog-content">
+  <div class="form-container">
+    <h3>{{ isEditing ? 'Editar Horario' : 'Añadir Nuevo Horario' }}</h3>
+    <form [formGroup]="horarioForm" (ngSubmit)="onGuardarHorario()" class="horario-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Día de la Semana</mat-label>
+        <mat-select formControlName="dia_semana" required>
+          <mat-option *ngFor="let dia of diasSemana" [value]="dia.valor">
+            {{ dia.texto }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="horarioForm.get('dia_semana')?.hasError('required')">Día es requerido.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de Inicio (HH:MM)</mat-label>
+        <input matInput type="time" formControlName="hora_inicio" required>
+        <mat-error *ngIf="horarioForm.get('hora_inicio')?.hasError('required')">Hora es requerida.</mat-error>
+        <mat-error *ngIf="horarioForm.get('hora_inicio')?.hasError('pattern')">Formato HH:MM (ej. 09:30).</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Duración (minutos)</mat-label>
+        <input matInput type="number" formControlName="duracion_minutos" required min="15">
+        <mat-error *ngIf="horarioForm.get('duracion_minutos')?.hasError('required')">Duración requerida.</mat-error>
+        <mat-error *ngIf="horarioForm.get('duracion_minutos')?.hasError('min')">Mínimo 15 min.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacidad Máxima</mat-label>
+        <input matInput type="number" formControlName="capacidad_maxima" required min="1">
+        <mat-error *ngIf="horarioForm.get('capacidad_maxima')?.hasError('required')">Capacidad requerida.</mat-error>
+        <mat-error *ngIf="horarioForm.get('capacidad_maxima')?.hasError('min')">Mínimo 1.</mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="horarioForm.invalid">
+          <mat-icon>{{ isEditing ? 'save' : 'add' }}</mat-icon> {{ isEditing ? 'Actualizar Horario' : 'Añadir Horario' }}
+        </button>
+        <button mat-button type="button" (click)="resetForm()" *ngIf="isEditing">Cancelar Edición</button>
+      </div>
+    </form>
+  </div>
+
+  <mat-divider class="divider"></mat-divider>
+
+  <div class="list-container">
+    <h3>Horarios Definidos</h3>
+    <div *ngIf="isLoadingHorarios" class="loading-spinner-small">
+      <mat-spinner diameter="30"></mat-spinner> Cargando horarios...
+    </div>
+    <div *ngIf="!isLoadingHorarios && horariosDefinidos.length === 0" class="no-data-small">
+      No hay horarios definidos para esta clase.
+    </div>
+
+    <table mat-table [dataSource]="horariosDefinidos" *ngIf="!isLoadingHorarios && horariosDefinidos.length > 0" class="horarios-table">
+      <ng-container matColumnDef="dia_semana">
+        <th mat-header-cell *matHeaderCellDef> Día </th>
+        <td mat-cell *matCellDef="let horario"> {{ getNombreDia(horario.dia_semana) }} </td>
+      </ng-container>
+      <ng-container matColumnDef="hora_inicio">
+        <th mat-header-cell *matHeaderCellDef> Hora Inicio </th>
+        <td mat-cell *matCellDef="let horario"> {{ horario.hora_inicio | slice:0:5 }} </td> <!-- Muestra HH:MM -->
+      </ng-container>
+      <ng-container matColumnDef="duracion">
+        <th mat-header-cell *matHeaderCellDef> Duración </th>
+        <td mat-cell *matCellDef="let horario"> {{ horario.duracion_minutos }} min </td>
+      </ng-container>
+      <ng-container matColumnDef="capacidad">
+        <th mat-header-cell *matHeaderCellDef> Capacidad </th>
+        <td mat-cell *matCellDef="let horario"> {{ horario.capacidad_maxima }} </td>
+      </ng-container>
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let horario">
+          <button mat-icon-button color="primary" (click)="editarHorario(horario)" matTooltip="Editar Horario">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminarHorario(horario.id!)" matTooltip="Eliminar Horario">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="onCerrarDialogo()">Cerrar</button>
+</mat-dialog-actions>

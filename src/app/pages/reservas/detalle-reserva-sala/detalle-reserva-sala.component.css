@@ -1,0 +1,137 @@
+.detail-container {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.full-width-datepicker {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.horarios-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.horarios-container h3 {
+  margin-bottom: 10px;
+}
+
+.hora-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Espacio entre chips */
+}
+
+.mat-mdc-chip-action-label { /* Para asegurar que el texto dentro del chip sea visible */
+    overflow: visible;
+}
+
+.chip-no-disponible {
+    background-color: #e0e0e0 !important; /* Color para chips no disponibles */
+    cursor: not-allowed !important;
+}
+.chip-no-disponible-text {
+    font-style: italic;
+    font-size: 0.9em;
+    margin-left: 4px;
+}
+
+
+.actions-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loading-spinner, .no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: #757575;
+}
+.spinner-center {
+    margin: 20px auto;
+    display: block;
+}
+
+.chip-limite-alcanzado {
+    background-color: #ffe0b2 !important; /* Un color naranja claro para indicar límite */
+    cursor: not-allowed !important;
+    border: 1px dashed #ffb74d;
+}
+
+.seleccion-info {
+    margin-top: 10px;
+    font-style: italic;
+    color: #3f51b5;
+}
+
+/* ... tu css existente ... */
+
+.chip-capacity-info {
+  font-size: 0.8em; /* Un poco más pequeño que el texto principal del chip */
+  margin-left: 6px; /* Espacio respecto a la hora */
+  color: rgba(0, 0, 0, 0.6); /* Un color un poco más suave */
+  font-style: italic;
+}
+
+/* Si el chip está seleccionado, quizás quieras que el color de la capacidad sea más visible */
+.mat-mdc-chip.mat-mdc-chip-selected .chip-capacity-info,
+mat-chip-option[aria-selected="true"] .chip-capacity-info { /* Cubre ambos tipos de chips */
+  color: currentColor; /* Hereda el color del texto del chip seleccionado */
+  opacity: 0.8;
+}
+
+/* Ajustes para los textos de estado para que no se vean raros con la capacidad */
+.chip-status-text, .chip-no-disponible-text {
+  font-size: 0.8em;
+  margin-left: 4px;
+  font-weight: 500;
+}
+
+.chip-user-ya-reservado .chip-status-text { /* Si es una reserva del usuario y no está seleccionada */
+  color: #6d1bb5; /* Un color distintivo, ajústalo a tu tema */
+}
+
+/* Clases que ya tenías, asegúrate de que sus estilos no entren en conflicto o mejóralos */
+.chip-no-disponible {
+  background-color: #e0e0e0 !important; /* Ejemplo: gris claro para los completamente no disponibles */
+  color: #757575 !important;
+  cursor: not-allowed !important;
+}
+.chip-no-disponible .chip-capacity-info {
+    display: none; /* Ocultar capacidad si el chip está marcado como no disponible por otros */
+}
+
+
+.chip-limite-alcanzado {
+  background-color: #ffe0b2 !important; /* Ejemplo: un color ámbar claro */
+  color: #8d6e63 !important;
+  /* cursor: not-allowed !important;  Ya lo gestiona el [disabled] */
+}
+.chip-limite-alcanzado .chip-capacity-info {
+    display: none; /* Ocultar capacidad si el chip está marcado como limite alcanzado */
+}
+
+.chip-user-ya-reservado {
+  background-color: #c5cae9 !important; /* Ejemplo: un color índigo claro */
+  border: 1px solid #3f51b5 !important;
+  /* No necesariamente cambiar el fondo si no está seleccionado, el texto es suficiente */
+}
+.chip-user-ya-reservado .chip-status-text{
+  font-weight: bold;
+}
+
+.mat-mdc-chip-selected.chip-user-ya-reservado { /* Si es del usuario Y está seleccionada */
+    background-color: var(--mdc-chip-elevated-container-color, #3f51b5) !important;
+    color: white !important;
+    /* Ya se encarga el color="primary" */
+}
+.mat-mdc-chip-selected.chip-user-ya-reservado .chip-status-text {
+    color: currentColor; /* Hereda color del chip seleccionado */
+}

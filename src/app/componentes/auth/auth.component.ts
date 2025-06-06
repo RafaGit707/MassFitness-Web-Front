@@ -4,6 +4,8 @@ import { AuthService, User } from '../../servicios/auth.service';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-auth',
@@ -20,6 +22,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   loggedIn: boolean = false;
   currentUserName: string = '';
   isAdmin: boolean = false;
+  isMobileMenuOpen = false;
 
   showLoginModal = false;
   showRegisterModal = false;
@@ -68,12 +71,85 @@ export class AuthComponent implements OnInit, OnDestroy {
     document.body.classList.remove("no-scroll");
   }
 
+  // openLogin(): void {
+  //   this.closeModals();
+  //   this.showLoginModal = true;
+  //   this.loginError = null;
+  //   this.loginData = { nombre_usuario: '', contrasena: '' };
+  //   document.body.classList.add("no-scroll");
+  // }
+
+  // openRegister(): void {
+  //   this.closeModals();
+  //   this.showRegisterModal = true;
+  //   this.registerError = null;
+  //   this.clearRegisterForm();
+  //   this.checkPasswordStrength('');
+  //   document.body.classList.add("no-scroll");
+  // }
+
+  // closeModals(): void {
+  //   this.showLoginModal = false;
+  //   this.showRegisterModal = false;
+  //   document.body.classList.remove("no-scroll");
+  // }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    this.updateNoScrollBody();
+  }
+
+  closeMenuAndNavigate(target?: string): void {
+    this.isMobileMenuOpen = false;
+    this.updateNoScrollBody();
+    if (target && target.startsWith('#')) {
+      this.scrollToContact(target);
+    }
+    // La navegación con routerLink se maneja automáticamente al hacer clic.
+  }
+
+  openLoginAndCloseMenu(): void {
+    this.openLogin(); // Tu método existente para abrir el modal de login
+    this.isMobileMenuOpen = false;
+    this.updateNoScrollBody(); // openLogin ya debería manejar no-scroll, pero por si acaso
+  }
+
+  logoutAndCloseMenu(): void {
+    this.logout(); // Tu método existente
+    this.isMobileMenuOpen = false;
+    this.updateNoScrollBody();
+  }
+
+  scrollToContact(hash: string): void {
+    this.isMobileMenuOpen = false; // Asegúrate de cerrar el menú
+    this.updateNoScrollBody();
+    const targetId = hash.substring(1);
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.warn(`Elemento con id '${targetId}' no encontrado.`);
+      // Opcional: navegar a la home si no se encuentra y estás en otra página
+      // this.router.navigate(['/']);
+    }
+  }
+
+  // Método para controlar el scroll del body cuando el menú o modales están abiertos
+  private updateNoScrollBody(): void {
+    if (this.isMobileMenuOpen || this.showLoginModal || this.showRegisterModal) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+  }
+
+  // Asegúrate de llamar a updateNoScrollBody() también en tus open/closeModals
   openLogin(): void {
     this.closeModals();
     this.showLoginModal = true;
     this.loginError = null;
     this.loginData = { nombre_usuario: '', contrasena: '' };
-    document.body.classList.add("no-scroll");
+    this.updateNoScrollBody(); // AÑADIR
   }
 
   openRegister(): void {
@@ -82,13 +158,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.registerError = null;
     this.clearRegisterForm();
     this.checkPasswordStrength('');
-    document.body.classList.add("no-scroll");
+    this.updateNoScrollBody(); // AÑADIR
   }
 
   closeModals(): void {
     this.showLoginModal = false;
     this.showRegisterModal = false;
-    document.body.classList.remove("no-scroll");
+    this.updateNoScrollBody(); // AÑADIR o ASEGURAR que está
   }
 
   onLoginSubmit(form: NgForm): void {

@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { AdminService, Entrenador } from '../../admin/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-editar-entrenador-dialog',
   templateUrl: './editar-entrenador-dialog.component.html',
   styleUrls: ['./editar-entrenador-dialog.component.css']
 })
+
 export class EditarEntrenadorDialogComponent implements OnInit {
   entrenadorForm: FormGroup;
   isLoading = false;
@@ -45,7 +47,7 @@ export class EditarEntrenadorDialogComponent implements OnInit {
     this.adminService.updateEntrenador(this.data.id, this.entrenadorForm.value).subscribe({
       next: () => {
         this.isLoading = false;
-        this.dialogRef.close(true); // Éxito
+        this.dialogRef.close(true);
       },
       error: (error) => {
         this.isLoading = false;

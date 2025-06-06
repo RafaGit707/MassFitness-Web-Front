@@ -1,9 +1,9 @@
-
+<!-- 
 <div class="container-header" #containerHeader>
     <div class="div-fondo"></div>
 
     <section class="img-titulo">
-        <img src="../assets/massfitness_nobackground.png" class="img-top" alt="Imagen de fondo arriba" loading="lazy">
+        <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-top" loading="lazy">
         <h1 class="titulo-top">Bienvenidos a MassFitness</h1>
     </section>
 
@@ -11,11 +11,11 @@
         <div class="topheader">
             <div class="logo">
                 <a href="index.html">
-                    <img src="../assets/massfitness_nobackground.png" class="img-logo" loading="lazy">
+                    <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-logo" loading="lazy">
                 </a>
                 <nav class="nav-enlaces">
                     <ul>
-                        <li><a href="enrrenadores.html">Blog</a></li>
+                        <li><a routerLink="boxeo">Boxeo</a></li>
                         <li><a href="servicios.html">Servicios</a></li>
                         <li><a class="enlaces" href = #contacto>Contacto</a></li>
                     </ul>
@@ -30,14 +30,117 @@
                     </li>
 
                     <li class="user-sesion" *ngIf="loggedIn">
-                        <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span>
+                        <span class="user"><a routerLink="perfil"> {{ currentUserName }}</a></span>
                         <button (click)="logout()" type="button" class="button-cerrar-sesion">Cerrar sesión</button>
-                        <a *ngIf="isAdmin" routerLink="/admin-dashboard" class="button-iniciar-sesion" style="color: yellow; font-size: 14px;">Admin Panel</a>
+                        <a *ngIf="isAdmin" routerLink="admin-dashboard" class="button-admin-panel" >Admin Panel</a>
                     </li>
                 </ul>
             </nav>
         </div>
     </header>
+</div> -->
+
+
+
+<div class="container-header" #containerHeader>
+    <div class="div-fondo"></div>
+
+    <section class="img-titulo">
+        <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-top" loading="lazy">
+        <h1 class="titulo-top">Bienvenidos a MassFitness</h1>
+    </section>
+    <header #headerElement>
+        <div class="topheader">
+        <div class="logo-container"> <!-- Contenedor para logo y enlaces de escritorio -->
+            <a routerLink="/"> <!-- Enlace a la home -->
+                <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-logo" loading="lazy">
+            </a>
+            <nav class="nav-enlaces nav-enlaces-desktop"> <!-- Enlaces solo para escritorio -->
+                <ul>
+                    <li><a routerLink="/boxeo">Boxeo</a></li>
+                    <li><a routerLink="/servicios">Servicios</a></li> <!-- Asumiendo routerLink para servicios -->
+                    <li><a class="enlaces" (click)="scrollToContact('#contacto')">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+             <div class="session-burger-container"> <!-- Contenedor para botones de sesión (escritorio) y hamburguesa (móvil) -->
+                <nav class="nav-session nav-session-desktop"> <!-- Botones de sesión solo para escritorio -->
+                    <ul>
+                        <li *ngIf="!loggedIn">
+                            <button type="button" class="button-iniciar-sesion" (click)="openLogin()">
+                            Iniciar Sesión
+                            </button>
+                        </li>
+                        <li class="user-sesion" *ngIf="loggedIn">
+                            <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span>
+                            <button (click)="logout()" type="button" class="button-cerrar-sesion">Cerrar sesión</button>
+                            <a *ngIf="isAdmin" routerLink="/admin-dashboard" class="button-admin-panel">Admin Panel</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Icono de Hamburguesa para Móvil -->
+                <div class="burger-menu-icon" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+<!-- 3. Menú Móvil (Overlay) -->
+<div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen">
+    <div class="mobile-menu-header">
+        <a routerLink="/" (click)="closeMenuAndNavigate()">
+            <img src="../assets/massfitness_nobackground.webp" class="mobile-menu-logo" alt="MassFitness Logo">
+        </a>
+        <div class="mobile-session-controls">
+            <button *ngIf="!loggedIn" type="button" class="button-iniciar-sesion mobile" (click)="openLoginAndCloseMenu()">
+                Iniciar Sesión
+            </button>
+            <div class="user-admin-button">
+                <div *ngIf="loggedIn" class="mobile-user-info">
+                    <!-- En móvil, el nombre de usuario podría estar en el listado principal -->
+                    <span class="user"><a routerLink="/perfil" (click)="closeMenuAndNavigate()">{{ currentUserName }}</a></span>
+                </div>
+                <div *ngIf="isAdmin">
+                    <button type="button" class="button-admin-panel">
+                        <a class="enlaces" routerLink="/admin-dashboard" (click)="closeMenuAndNavigate()">Panel de Admin</a>
+                    </button>
+                </div>
+            </div>    
+        </div>
+        <img src="../assets/X-purple.png" class="mobile-menu-close" (click)="toggleMobileMenu()" alt="Cerrar menú">
+        <!-- CAMBIO: Usa tu X-purple.png como en tus modales -->
+    </div>
+    <nav class="mobile-menu-nav">
+        <ul>
+            <hr *ngIf="loggedIn">
+
+            <li><a routerLink="/boxeo" (click)="closeMenuAndNavigate()">Boxeo</a></li>
+            <li><a routerLink="/servicios" (click)="closeMenuAndNavigate()">Servicios</a></li>
+            <li><a (click)="closeMenuAndNavigate('#contacto')">Contacto</a></li>
+
+            <ng-container *ngIf="loggedIn">
+                <hr>
+                <!-- <li *ngIf="isAdmin"><a routerLink="/admin-dashboard" (click)="closeMenuAndNavigate()">Panel de Admin</a></li> -->
+                <!-- Aquí podrías añadir más enlaces específicos de admin si los tuvieras separados en Vue -->
+                <!-- Ejemplo de submenú de admin si fuera necesario (más complejo) -->
+                <!--
+                <ng-container *ngIf="isAdmin">
+                    <hr>
+                    <li class="mobile-menu-section-title"><a>Gestión Admin</a></li>
+                    <li><a routerLink="/admin-dashboard/articulos" (click)="closeMenuAndNavigate()">Artículos</a></li>
+                    <li><a routerLink="/admin-dashboard/usuarios" (click)="closeMenuAndNavigate()">Usuarios</a></li>
+                </ng-container>
+                -->
+                <hr>
+                <li (click)="logoutAndCloseMenu()"><a>Cerrar Sesión</a></li>
+            </ng-container>
+        </ul>
+    </nav>
 </div>
 
 <div id="mostrar" class="container1" *ngIf="showLoginModal">

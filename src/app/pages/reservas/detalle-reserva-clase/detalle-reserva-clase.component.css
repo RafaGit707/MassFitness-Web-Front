@@ -1,0 +1,136 @@
+.reserva-detail-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif; /* Ejemplo de fuente */
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 15px;
+}
+
+.header-section h1 {
+  margin-left: 15px;
+  font-size: 2em;
+  color: #3f51b5; /* Color primario de Material */
+}
+
+.back-button {
+  min-width: auto; /* Para que el botón de ícono no ocupe mucho espacio */
+}
+
+.info-card, .scheduler-card {
+  margin-bottom: 25px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),
+              0 2px 2px 0 rgba(0,0,0,.14),
+              0 1px 5px 0 rgba(0,0,0,.12) !important; /* Sobrescribir si es necesario */
+}
+
+.info-card mat-card-title {
+  font-size: 1.5em;
+}
+
+.scheduler-card mat-card-title {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 15px;
+}
+
+.datepicker-field {
+  width: 100%;
+}
+
+.horarios-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.horarios-container p strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.hora-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; /* Espacio entre chips */
+}
+
+/* Ajustes para los chips de Material */
+.mat-mdc-chip-set .mdc-evolution-chip-set__chips {
+    display: flex;
+    flex-flow: wrap;
+    gap: 8px; /* Asegúrate que el gap se aplique */
+}
+
+.mat-mdc-chip-action-label {
+    overflow: visible !important; /* Para que el texto (No Disp.) no se corte */
+}
+
+.mat-mdc-standard-chip.chip-no-disponible {
+  background-color: #e0e0e0 !important;
+  color: #757575 !important;
+  cursor: not-allowed !important;
+  border: 1px dashed #bdbdbd;
+}
+
+.chip-no-disponible-text {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-left: 5px;
+  opacity: 0.7;
+}
+
+.mat-mdc-standard-chip.chip-seleccionado {
+  background-color: #3f51b5 !important; /* Color primario */
+  color: white !important;
+}
+
+.chip-selected-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.no-horarios, .not-found-container, .page-loading-spinner {
+  text-align: center;
+  padding: 40px 20px;
+  color: #555;
+  font-size: 1.1em;
+}
+
+.page-loading-spinner p, .horarios-loading p {
+  margin-top: 10px;
+}
+.horarios-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    color: #757575;
+}
+
+.actions-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end; /* Alinea el botón a la derecha */
+}
+
+.chip-capacidad-info {
+  font-size: 0.8em;
+  margin-left: 8px;
+  color: #757575;
+}
+.mat-mdc-standard-chip.chip-seleccionado .chip-capacidad-info { /* Para que se vea bien cuando el chip está seleccionado */
+    color: rgba(255, 255, 255, 0.8);
+}

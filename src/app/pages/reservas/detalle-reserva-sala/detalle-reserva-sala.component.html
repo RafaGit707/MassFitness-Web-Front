@@ -1,0 +1,96 @@
+<div class="reserva-detail-container" *ngIf="!isLoading; else loadingPage">
+  <ng-container *ngIf="sala; else salaNotFound">
+    <div class="header-section">
+      <button mat-icon-button routerLink="/reservar/salas" aria-label="Volver a la lista de salas" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Reservar Espacio: {{ sala.nombre }}</h1>
+    </div>
+
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>{{ sala.nombre }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Capacidad Máxima:</strong> {{ sala.capacidad_maxima }} personas</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="scheduler-card">
+      <mat-card-title>Selecciona Fecha y Hora(s) <span *ngIf="horariosDelDia.length > 0 && horariosDelDia[0].usuario_reservas_previas !== undefined"></span>(Puedes añadir {{ reservasRestantesHoy }} más hoy. Límite: {{ MAX_RESERVAS_ESPACIO_POR_DIA }})</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="datepicker-field">
+          <mat-label>Fecha de la reserva</mat-label>
+          <input matInput [matDatepicker]="picker" (dateChange)="onFechaSeleccionada($event)" [(ngModel)]="fechaSeleccionada" readonly
+                 placeholder="Elige una fecha" [min]="minDate">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+         <div *ngIf="!isHorariosLoading && fechaSeleccionada && horariosDelDia.length > 0" class="horarios-container">
+          <p><strong>Horarios Disponibles para {{ fechaSeleccionada | date:'EEEE, d MMMM y' }}:</strong></p>
+
+          <mat-chip-listbox aria-label="Selección de hora" class="hora-selector" multiple="true"
+                            [(ngModel)]="horariosSeleccionadosNgModel"
+                            (ngModelChange)="onChipSelectionChange($event)">
+            <mat-chip-option *ngFor="let horario of horariosDelDia"
+                             [value]="horario"
+                             [disabled]="horario.ocupado_por_otro || horario.usuario_tiene_reserva_aqui || (!horario.disponible && !horariosSeleccionadosNgModel.includes(horario))"
+                             [color]="horariosSeleccionadosNgModel.includes(horario) ? 'primary' : (horario.ocupado_por_otro ? undefined : 'accent')"
+                             [ngClass]="{
+                                 'chip-no-disponible': horario.ocupado_por_otro && !horario.usuario_tiene_reserva_aqui,
+                                 'chip-limite-alcanzado': !horario.disponible && !horario.ocupado_por_otro && !horariosSeleccionadosNgModel.includes(horario) && !horario.usuario_tiene_reserva_aqui,
+                                 'chip-user-ya-reservado': horario.usuario_tiene_reserva_aqui && !estaSeleccionado(horario)
+                             }">
+              {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+
+              <!-- NUEVO: Mostrar capacidad -->
+              <span class="chip-capacity-info"
+                    *ngIf="horario.capacidad_maxima_slot != null && horario.reservas_hechas != null && !horario.ocupado_por_otro">
+                ({{ horario.reservas_hechas }}/{{ horario.capacidad_maxima_slot }})
+              </span>
+              <!-- Caso especial: si está ocupado_por_otro pero el usuario YA lo tiene reservado Y seleccionado, mostrar su contribución -->
+              <span class="chip-capacity-info"
+                    *ngIf="horario.capacidad_maxima_slot != null && horario.reservas_hechas != null && horario.ocupado_por_otro && horario.usuario_tiene_reserva_aqui && estaSeleccionado(horario)">
+                ({{ horario.reservas_hechas }}/{{ horario.capacidad_maxima_slot }}, incluyéndote)
+              </span>
+
+
+              <!-- Mensajes de estado existentes -->
+              <span *ngIf="horario.ocupado_por_otro && !horario.usuario_tiene_reserva_aqui" class="chip-status-text"> (Lleno)</span>
+              <span *ngIf="!horario.disponible && !horario.ocupado_por_otro && !horariosSeleccionadosNgModel.includes(horario) && !horario.usuario_tiene_reserva_aqui" class="chip-no-disponible-text"> (No disponible)</span>
+              <span *ngIf="horario.usuario_tiene_reserva_aqui && !estaSeleccionado(horario)" class="chip-status-text"> (Ya reservado)</span>
+
+              <mat-icon *ngIf="estaSeleccionado(horario)" class="chip-selected-icon">check_circle</mat-icon>
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+
+        <div *ngIf="!isHorariosLoading && fechaSeleccionada && horariosDelDia.length === 0" class="no-horarios">
+          <p>No hay horarios disponibles para la fecha seleccionada.</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" (click)="confirmarReserva()" [disabled]="horariosSeleccionadosNgModel.length === 0 || isLoading">
+          <mat-icon>event_available</mat-icon> Confirmar {{ horariosSeleccionadosNgModel.length }} Reserva(s)
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </ng-container>
+
+  <ng-template #salaNotFound>
+    <div class="not-found-container">
+      <h2>Espacio no encontrado</h2>
+      <p>El espacio que buscas no existe o no está disponible.</p>
+      <button mat-stroked-button routerLink="/reservar/salas">Volver a la lista de salas</button>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #loadingPage>
+  <div class="page-loading-spinner">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>Cargando detalles del espacio...</p>
+  </div>
+</ng-template>

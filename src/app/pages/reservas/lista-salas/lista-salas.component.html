@@ -1,0 +1,22 @@
+<div class="list-container">
+  <h2>Selecciona un Espacio para Reservar</h2>
+  <mat-spinner *ngIf="isLoading" diameter="50" class="spinner-center"></mat-spinner>
+
+  <div *ngIf="!isLoading && salas.length === 0" class="no-results">
+    <p>No hay espacios disponibles en este momento.</p>
+  </div>
+
+  <mat-list *ngIf="!isLoading && salas.length > 0">
+    <mat-list-item *ngFor="let sala of salas" (click)="seleccionarSala(sala.id)" class="list-item-hover">
+      <mat-icon matListItemIcon>meeting_room</mat-icon> <!-- O un ícono más apropiado para 'espacio' -->
+      <div matListItemTitle>{{ sala.nombre }}</div>
+      <div matListItemLine>Capacidad: {{ sala.capacidad_maxima }}</div>
+      <!-- Podrías mostrar más detalles si los tienes, como equipamiento o tipo de espacio -->
+    </mat-list-item>
+  </mat-list>
+
+  <button mat-stroked-button routerLink="/reservar" class="back-button">
+    <mat-icon>arrow_back</mat-icon>
+    Volver a Selección
+  </button>
+</div>

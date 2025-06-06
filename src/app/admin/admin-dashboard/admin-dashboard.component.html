@@ -92,21 +92,53 @@
   <mat-tab label="Clases">
     <div class="tab-content">
       <h2>Gestionar Clases</h2>
-       <button mat-raised-button color="primary" (click)="abrirModalCrearClase()" class="add-button">
-         <mat-icon>add</mat-icon> Crear Clase
-       </button>
-       <!-- Tabla para Clases (similar a Usuarios) -->
-        <div *ngIf="isLoadingClases" class="loading-spinner"> <mat-spinner diameter="50"></mat-spinner> </div>
-        <table mat-table [dataSource]="clases" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingClases && clases.length > 0">
-          <!-- Columnas: id, nombre, capacidad_maxima, entrenador_id, acciones -->
-           <ng-container matColumnDef="id"> <th mat-header-cell *matHeaderCellDef> ID </th> <td mat-cell *matCellDef="let item"> {{item.id}} </td> </ng-container>
-           <ng-container matColumnDef="nombre"> <th mat-header-cell *matHeaderCellDef> Nombre </th> <td mat-cell *matCellDef="let item"> {{item.nombre}} </td> </ng-container>
-           <ng-container matColumnDef="capacidad_maxima"> <th mat-header-cell *matHeaderCellDef> Capacidad </th> <td mat-cell *matCellDef="let item"> {{item.capacidad_maxima}} </td> </ng-container>
-           <ng-container matColumnDef="entrenador_id"> <th mat-header-cell *matHeaderCellDef> ID Entrenador </th> <td mat-cell *matCellDef="let item"> {{item.entrenador_id}} </td> </ng-container> <!-- Podrías mostrar nombre del entrenador haciendo join o llamada extra -->
-           <ng-container matColumnDef="acciones"> <th mat-header-cell *matHeaderCellDef> Acciones </th> <td mat-cell *matCellDef="let item"> <button mat-icon-button color="primary" (click)="abrirModalEditarClase(item)"><mat-icon>edit</mat-icon></button> <button mat-icon-button color="warn" (click)="eliminarClase(item.id)"><mat-icon>delete</mat-icon></button> </td> </ng-container>
-           <tr mat-header-row *matHeaderRowDef="displayedColumnsClases"></tr> <tr mat-row *matRowDef="let row; columns: displayedColumnsClases;"></tr>
-        </table>
-         <div *ngIf="!isLoadingClases && clases.length === 0" class="no-data"> No hay clases para mostrar. </div>
+      <button mat-raised-button color="primary" (click)="abrirModalCrearClase()" class="add-button">
+        <mat-icon>add</mat-icon> Crear Clase
+      </button>
+
+      <div *ngIf="isLoadingClases" class="loading-spinner"> <mat-spinner diameter="50"></mat-spinner> </div>
+
+      <table mat-table [dataSource]="clases" class="mat-elevation-z8 entity-table" *ngIf="!isLoadingClases && clases.length > 0">
+        <!-- Columna ID -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let item"> {{item.id}} </td>
+        </ng-container>
+        <!-- Columna Nombre -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
+          <td mat-cell *matCellDef="let item"> {{item.nombre}} </td>
+        </ng-container>
+        <!-- Columna Capacidad -->
+        <ng-container matColumnDef="capacidad_maxima">
+          <th mat-header-cell *matHeaderCellDef> Capacidad Base </th>
+          <td mat-cell *matCellDef="let item"> {{item.capacidad_maxima}} </td>
+        </ng-container>
+        <!-- Columna Entrenador ID -->
+        <ng-container matColumnDef="entrenador_id">
+          <th mat-header-cell *matHeaderCellDef> Entrenador </th>
+          <td mat-cell *matCellDef="let item"> {{ getNombreEntrenador(item.entrenador_id) || item.entrenador_id }} </td>
+        </ng-container>
+        <!-- Columna Acciones (con nuevo botón) -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-icon-button color="primary" (click)="abrirModalEditarClase(item)" matTooltip="Editar Clase">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="abrirModalGestionarHorarios(item)" matTooltip="Gestionar Horarios">
+              <mat-icon>schedule</mat-icon> <!-- O calendar_month -->
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarClase(item.id)" matTooltip="Eliminar Clase">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsClases"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsClases;"></tr>
+      </table>
+      <div *ngIf="!isLoadingClases && clases.length === 0" class="no-data"> No hay clases para mostrar. </div>
     </div>
   </mat-tab>
 

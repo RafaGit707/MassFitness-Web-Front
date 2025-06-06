@@ -1,4 +1,4 @@
-<div class="profile-container">
+<!-- <div class="profile-container">
     <ng-container *ngIf="!isLoading; else loadingProfile">
     <div *ngIf="usuario; else noUser">
         <h1>Perfil de Usuario</h1>
@@ -22,7 +22,102 @@
     <ng-template #loadingProfile>
     <div class="loading-spinner">
         <mat-spinner diameter="50"></mat-spinner>
-        <p>Cargando perfil...</p>
+        <h2>Cargando Perfil...</h2>
     </div>
     </ng-template>
+</div> -->
+
+<div class="profile-page-container">
+  <ng-container *ngIf="!isLoadingUsuario; else loadingProfile">
+    <div *ngIf="usuario; else noUser" class="profile-header">
+      <div class="profile-avatar">
+        <!-- Podrías añadir una imagen de perfil aquí si la tuvieras -->
+        <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </div>
+      <div class="profile-info">
+        <h1>{{ usuario.nombre }}</h1>
+        <p class="username">{{ '@' + usuario.nombre_usuario }}</p>
+        <p class="email"><mat-icon class="info-icon">email</mat-icon> {{ usuario.correo_electronico }}</p>
+        <p class="role"><mat-icon class="info-icon">admin_panel_settings</mat-icon> Rol: {{ usuario.rol | titlecase }}</p>
+        <p class="member-since"><mat-icon class="info-icon">calendar_today</mat-icon> Miembro desde: {{ usuario.created_at | date:'longDate' }}</p>
+        <button mat-stroked-button color="primary" (click)="actualizarPerfil()" class="edit-profile-button">
+          <mat-icon>edit</mat-icon> Editar Perfil
+        </button>
+      </div>
+    </div>
+    <ng-template #noUser>
+      <div class="centered-message">
+        <p>No se pudo cargar la información del usuario.</p>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingProfile>
+    <div class="page-loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+      <h2>Cargando Perfil...</h2>
+    </div>
+  </ng-template>
+
+  <mat-divider *ngIf="usuario"></mat-divider>
+
+  <div *ngIf="usuario" class="reservas-section">
+    <h2>Mis Próximas Reservas</h2>
+
+    <mat-tab-group animationDuration="0ms" mat-align-tabs="start">
+      <mat-tab label="Clases Reservadas ({{ misReservasClases.length }})">
+        <div class="reservas-list-container">
+          <div *ngIf="isLoadingReservas" class="loading-spinner">
+            <mat-spinner diameter="40"></mat-spinner> <p>Cargando reservas de clases...</p>
+          </div>
+          <div *ngIf="!isLoadingReservas && misReservasClases.length === 0" class="no-reservas">
+            <mat-icon class="no-reservas-icon">event_busy</mat-icon>
+            <p>Aún no tienes clases reservadas.</p>
+            <button mat-flat-button color="accent" routerLink="/reservar/clases">Reservar una Clase</button>
+          </div>
+          <mat-list *ngIf="!isLoadingReservas && misReservasClases.length > 0">
+            <mat-list-item *ngFor="let reserva of misReservasClases" class="reserva-item">
+              <mat-icon matListItemIcon color="primary">event</mat-icon>
+              <div matListItemTitle class="reserva-title">{{ reserva.clase?.nombre || 'Clase Desconocida' }}</div>
+              <div matListItemLine class="reserva-detail">
+                {{ reserva.horario_reserva | date:'EEEE, d MMMM y, HH:mm' }}h
+              </div>
+              <div matListItemMeta class="reserva-actions">
+                <button mat-icon-button color="warn" (click)="cancelarReserva(reserva)" matTooltip="Cancelar Reserva">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Espacios Reservados ({{ misReservasEspacios.length }})">
+        <div class="reservas-list-container">
+          <div *ngIf="isLoadingReservas" class="loading-spinner">
+            <mat-spinner diameter="40"></mat-spinner> <p>Cargando reservas de espacios...</p>
+          </div>
+          <div *ngIf="!isLoadingReservas && misReservasEspacios.length === 0" class="no-reservas">
+             <mat-icon class="no-reservas-icon">no_meeting_room</mat-icon>
+            <p>Aún no tienes espacios reservados.</p>
+            <button mat-flat-button color="accent" routerLink="/reservar/salas">Reservar un Espacio</button>
+          </div>
+          <mat-list *ngIf="!isLoadingReservas && misReservasEspacios.length > 0">
+            <mat-list-item *ngFor="let reserva of misReservasEspacios" class="reserva-item">
+              <mat-icon matListItemIcon color="accent">place</mat-icon>
+              <div matListItemTitle class="reserva-title">{{ reserva.espacio?.nombre || 'Espacio Desconocido' }}</div>
+              <div matListItemLine class="reserva-detail">
+                {{ reserva.horario_reserva | date:'EEEE, d MMMM y, HH:mm' }}h
+              </div>
+              <div matListItemMeta class="reserva-actions">
+                <button mat-icon-button color="warn" (click)="cancelarReserva(reserva)" matTooltip="Cancelar Reserva">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>

@@ -48,6 +48,19 @@ export class AuthService {
     this.loadInitialUserAndValidate(); // Llamada correcta en el constructor
   }
 
+  updateMyProfile(id: number, profileData: Partial<User>): Observable<User> { // Partial<User> para enviar solo algunos campos
+    // Asume un endpoint específico en Laravel: PUT /api/perfil
+    return this.http.put<User>(`${this.apiUrl}usuarios/${id}`, profileData).pipe(
+      tap(updatedUser => {
+        // Actualiza el usuario en el BehaviorSubject si la API devuelve el usuario actualizado
+        const currentToken = this.getToken();
+        if (currentToken) {
+          this.setSessionData(currentToken, updatedUser); // setSessionData ya existe
+        }
+      })
+    );
+  }
+
   registrar(userData: any): Observable<AuthResponseData> {
     return this.http.post<AuthResponseData>(`${this.apiUrl}registrar`, userData)
       .pipe(
@@ -130,6 +143,7 @@ export class AuthService {
     }
   }
 
+  // FUNCIONA PERO LA Google AI Studio DICE QUE SIGUE HABIENDO EL ERROR NG0200
   // Orquesta la carga desde localStorage y la validación con el backend
   private loadInitialUserAndValidate(): void {
     const token = localStorage.getItem(this.tokenKey);
@@ -165,8 +179,53 @@ export class AuthService {
     }
   }
 
+  // METODO SIMPLIFICADO PARA EVITAR EL ERROR NG0200 PERO SIGUE DANDO EL MISMO ERROR
+  // private loadInitialUserAndValidate(): void {
+  //   const token = localStorage.getItem(this.tokenKey);
+  //   const storedUserJson = localStorage.getItem(this.userStorageKey);
+  //   console.log('AuthService [loadInitialUserAndValidate]: Starting check. Token:', !!token, 'UserJson:', !!storedUserJson);
+  //   this.authInitialized.next(false);
+
+  //   if (token && storedUserJson) {
+  //     try {
+  //       const userFromStorage: User = JSON.parse(storedUserJson);
+  //       this.userSubject.next(userFromStorage);
+  //       console.log('AuthService [loadInitialUserAndValidate]: User tentatively loaded:', userFromStorage.nombre_usuario);
+
+  //       // --- COMENTA LA LLAMADA HTTP TEMPORALMENTE ---
+  //       console.log('AuthService [loadInitialUserAndValidate]: SKIPPING fetchAuthenticatedUserInternal FOR TEST.');
+  //       // Simula éxito para que la lógica continúe sin la llamada HTTP
+  //       this.setSessionData(token, userFromStorage); // Usa los datos de localStorage
+  //       console.log('AuthService [loadInitialUserAndValidate]: SIMULATING Token validated successfully.');
+  //       this.authInitialized.next(true);
+  //       // --- FIN DEL CÓDIGO COMENTADO/MODIFICADO ---
+
+  //       /* ESTO ES LO QUE ESTABA ANTES:
+  //       this.fetchAuthenticatedUserInternal().subscribe({
+  //         next: (userFromApi) => {
+  //           this.setSessionData(token, userFromApi);
+  //           console.log('AuthService [loadInitialUserAndValidate]: Token validated successfully.');
+  //           this.authInitialized.next(true);
+  //         },
+  //         error: (err) => {
+  //           console.warn('AuthService [loadInitialUserAndValidate]: Token validation failed. Logging out.', err.message || err);
+  //           this.clearSessionAndRedirect();
+  //         }
+  //       });
+  //       */
+  //     } catch (e) {
+  //       console.error('AuthService [loadInitialUserAndValidate]: Error parsing user. Clearing session.', e);
+  //       this.clearSessionAndRedirect();
+  //     }
+  //   } else {
+  //     console.log('AuthService [loadInitialUserAndValidate]: No session in storage.');
+  //     this.userSubject.next(null);
+  //     this.authInitialized.next(true);
+  //   }
+  // }
+
   // Hace la llamada a la API para obtener el usuario autenticado (el interceptor añade el token)
-  private fetchAuthenticatedUserInternal(): Observable<User> {
+  public fetchAuthenticatedUserInternal(): Observable<User> {
     console.log('AuthService [fetchAuthenticatedUserInternal]: Calling API /usuarioAutenticado (Interceptor adds token)...');
     return this.http.get<User>(`${this.apiUrl}usuarioAutenticado`)
       .pipe(

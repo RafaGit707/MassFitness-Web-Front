@@ -1,0 +1,15 @@
+<div class="list-container">
+  <h2>Selecciona una Clase para Reservar</h2>
+  <mat-spinner *ngIf="isLoading" diameter="50"></mat-spinner>
+  <div *ngIf="!isLoading && clases.length === 0">
+    <p>No hay clases disponibles en este momento.</p>
+  </div>
+  <mat-list *ngIf="!isLoading && clases.length > 0">
+    <mat-list-item *ngFor="let clase of clases" (click)="seleccionarClase(clase.id)" class="list-item-hover">
+      <mat-icon matListItemIcon>fitness_center</mat-icon>
+      <div matListItemTitle>{{ clase.nombre }}</div>
+      <div matListItemLine>Capacidad: {{ clase.capacidad_maxima }}</div>
+      <!-- Podrías querer mostrar el nombre del entrenador aquí -->
+    </mat-list-item>
+  </mat-list>
+</div>

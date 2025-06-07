@@ -1,11 +1,12 @@
 
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { AuthService, User } from '../../servicios/auth.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -23,6 +24,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   currentUserName: string = '';
   isAdmin: boolean = false;
   isMobileMenuOpen = false;
+  isHomePage = false; 
 
   showLoginModal = false;
   showRegisterModal = false;
@@ -30,6 +32,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoadingRegister = false;
   loginError: string | null = null;
   registerError: string | null = null;
+  private scrollListener: (() => void) | null = null;
 
   passwordValidation = {
     length: false,
@@ -42,8 +45,9 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   private userSubscription: Subscription | null = null;
   private adminSubscription: Subscription | null = null;
+  private routerSubscription: Subscription | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.userSubscription = this.authService.user$.subscribe(user => {
@@ -61,36 +65,145 @@ export class AuthComponent implements OnInit, OnDestroy {
         console.log('AuthComponent: Admin status change detected', isAdmin);
     });
 
+    this.routerSubscription = this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      const previousHomePageState = this.isHomePage;
+      this.isHomePage = (event.urlAfterRedirects === '/' || event.urlAfterRedirects === '/home');
+
+      // Llama a la lógica de configuración del header CADA VEZ que cambia la ruta
+      this.configureHeaderState();
+    });
+
+    // Configuración inicial al cargar el componente
+    // Esto es importante si el componente carga directamente en una ruta que no es la home,
+    // o si carga en la home.
+    this.isHomePage = (this.router.url === '/' || this.router.url === '/home');
+    this.configureHeaderState(); // true para forzar re-configuración inicial
+
     // Initial state is set by the service constructor calling loadInitialAuthState()
   }
 
-  ngOnDestroy(): void {
-    // Unsubscribe to prevent memory leaks
-    this.userSubscription?.unsubscribe();
-    this.adminSubscription?.unsubscribe();
-    document.body.classList.remove("no-scroll");
+configureHeaderState() {
+  if (!this.headerRef?.nativeElement) {
+    console.warn('Header element not available yet for configuration.');
+    // Se podría reintentar en ngAfterViewInit si esto sucede a menudo.
+    return;
+  }
+  const header = this.headerRef.nativeElement as HTMLElement;
+  const containerHeader = this.containerRef?.nativeElement as HTMLElement; // El contenedor de la "hero"
+
+  // 1. Limpiar listener de scroll anterior si existe
+  if (this.scrollListener) {
+    window.removeEventListener('scroll', this.scrollListener);
+    this.scrollListener = null;
+    // console.log('Previous scroll listener removed.');
   }
 
-  // openLogin(): void {
-  //   this.closeModals();
-  //   this.showLoginModal = true;
-  //   this.loginError = null;
-  //   this.loginData = { nombre_usuario: '', contrasena: '' };
-  //   document.body.classList.add("no-scroll");
-  // }
+  // 2. Aplicar/Quitar clases y configurar listener según la página
+  if (this.isHomePage) {
+    // --- EN LA HOME PAGE ---
+    header.classList.remove('header-fixed');
+    containerHeader.removeAttribute('style');
 
-  // openRegister(): void {
-  //   this.closeModals();
-  //   this.showRegisterModal = true;
-  //   this.registerError = null;
-  //   this.clearRegisterForm();
-  //   this.checkPasswordStrength('');
-  //   document.body.classList.add("no-scroll");
-  // }
+    // Definir la función de scroll para la home
+    // Guardamos la referencia a ESTA función para poder quitarla luego
+    this.scrollListener = () => {
+      if (!this.headerRef?.nativeElement || !this.containerRef?.nativeElement) return;
 
-  // closeModals(): void {
-  //   this.showLoginModal = false;
-  //   this.showRegisterModal = false;
+      const headerEl = this.headerRef.nativeElement;
+      const containerHeaderEl = this.containerRef.nativeElement;
+
+      // Condición para fijar: Cuando el final del containerHeader (hero) está a punto de salir
+      // o cuando se ha scrolleado más allá de su altura menos la altura del header.
+      // O una lógica más simple si el header siempre está al fondo del containerHeader.
+      // Tu lógica original:
+      const headerTop = headerEl.getBoundingClientRect().top;
+      const triggerHeight = window.innerHeight - headerEl.offsetHeight;
+      const scrollPosition = window.scrollY;
+      if (headerTop <= 0) {
+        headerEl.classList.add('header-fixed'); // Fijo cuando el header llega al top
+      }
+
+      if (scrollPosition <= triggerHeight) {
+        header.classList.remove('header-fixed');
+      }
+
+    };
+    window.addEventListener('scroll', this.scrollListener);
+    // console.log('Scroll listener ADDED for Home page.');
+    // Ejecutar una vez por si la página carga ya scrolleada en la home
+    this.scrollListener();
+
+  } else {
+    // --- NO ES LA HOME PAGE ---
+    header.classList.add('header-fixed'); // Fijo desde el inicio
+    containerHeader.setAttribute('style', 'height: 0;'); // Aseguramos que no haya padding extra
+    // console.log('Header set to fixed for non-home page.');
+  }
+
+  this.updatePageContentPadding();
+}
+
+updatePageContentPadding() {
+  // Tu lógica de `updatePageContentPadding` es para ajustar el contenido principal
+  // que está DENTRO del `<router-outlet>`.
+  // Si el `<router-outlet>` está dentro de `div.container-header` y después del `<header>`,
+  // esta lógica podría necesitar ajustes.
+
+  // Si tu <router-outlet> está dentro de <main class="page-content"> que es HERMANO
+  // de <div class="container-header"> (como en mi sugerencia anterior), entonces:
+  const pageContent = document.querySelector('.page-content') as HTMLElement;
+  if (pageContent && this.headerRef?.nativeElement) {
+    if (!this.isHomePage) { // Solo en otras páginas (donde el header está fijo arriba)
+      const headerHeight = this.headerRef.nativeElement.offsetHeight;
+      // Si el router-outlet está directamente en el body o en un main principal
+      document.body.style.paddingTop = `${headerHeight}px`; // O pageContent.style.paddingTop
+    } else {
+      document.body.style.paddingTop = '0px'; // O pageContent.style.paddingTop
+    }
+  }
+}
+
+ngAfterViewInit() {
+  // this.getScrollValue(); // Si aún usas esto
+  // Se llama a configureHeaderState desde ngOnInit, pero una llamada aquí
+  // asegura que los elementos del DOM (headerRef, containerRef) existen.
+  if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
+    this.configureHeaderState();
+  } else {
+    // Podrías usar un setTimeout si a veces no están listos
+    setTimeout(() => {
+        if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
+            this.configureHeaderState();
+        }
+    }, 0);
+  }
+  // this.checkPasswordStrength(...);
+}
+
+ngOnDestroy(): void {
+  this.userSubscription?.unsubscribe();
+  this.adminSubscription?.unsubscribe();
+  this.routerSubscription?.unsubscribe();
+
+  if (this.scrollListener) {
+    window.removeEventListener('scroll', this.scrollListener);
+    this.scrollListener = null;
+    // console.log('Scroll listener removed on component destroy.');
+  }
+  document.body.classList.remove("no-scroll");
+  document.body.style.paddingTop = '0px'; // Resetear padding del body
+}
+
+
+
+
+
+  // ngOnDestroy(): void {
+  //   // Unsubscribe to prevent memory leaks
+  //   this.userSubscription?.unsubscribe();
+  //   this.adminSubscription?.unsubscribe();
   //   document.body.classList.remove("no-scroll");
   // }
 
@@ -238,11 +351,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.passwordValidation.valid = regex.test(password);
   }
 
-  ngAfterViewInit() {
-    this.getScrollValue();    
-    this.setupScrollHeader();
-    this.checkPasswordStrength(this.registroData.contrasena);
-  }
+  // ngAfterViewInit() {
+  //   this.getScrollValue();    
+  //   this.setupScrollHeader();
+  //   this.checkPasswordStrength(this.registroData.contrasena);
+  // }
   
   getScrollValue() {
     let ticking = false;
@@ -276,5 +389,5 @@ export class AuthComponent implements OnInit, OnDestroy {
     };
     window.addEventListener('scroll', checkScroll);
   }
-
+  
 }

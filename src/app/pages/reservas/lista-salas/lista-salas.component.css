@@ -27,3 +27,134 @@
 .back-button {
   margin-top: 20px;
 }
+
+/* Estilos generales para los contenedores de listas (aplicar al componente o a un wrapper) */
+.list-container {
+  max-width: 800px; /* O el ancho que prefieras */
+  margin: 40px auto; /* Centrado y con margen superior/inferior */
+  padding: 30px;
+  background-color: #1F2029; /* Fondo oscuro para el contenedor */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(94, 58, 212, 0.3); /* Sombra + borde sutil primario */
+  color: #F0F0F0; /* Color de texto principal */
+}
+
+.list-container h2 {
+  font-family: 'Montserrat', sans-serif; /* O tu fuente de títulos audaz */
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #FFFFFF; /* Blanco puro para el título principal */
+  text-align: center;
+  margin-bottom: 35px;
+  letter-spacing: 0.5px;
+  /* Efecto de texto sutil */
+  /* text-shadow: 0 0 10px rgba(94, 58, 212, 0.3); */
+}
+
+/* Estilo para el spinner de Material */
+.list-container mat-spinner {
+  margin: 40px auto; /* Centrar el spinner */
+}
+.list-container mat-spinner circle {
+  stroke: #5e3ad4; /* Color primario para el spinner */
+}
+.spinner-center { /* Si necesitas una clase específica para centrar */
+    display: block !important; /* Asegurar que se centre si está inline */
+}
+
+
+/* Mensaje cuando no hay resultados */
+.list-container .no-results p,
+.list-container div[fxLayoutAlign="center center"] p { /* Para el caso de clases */
+  text-align: center;
+  font-size: 1.1rem;
+  color: #A0A0A0; /* Color de texto secundario */
+  padding: 30px 0;
+  font-family: 'Open Sans', sans-serif; /* O tu fuente de cuerpo */
+}
+
+/* Estilos para mat-list y mat-list-item */
+.list-container mat-list {
+  padding: 0; /* Quitar padding por defecto de mat-list si lo tiene */
+}
+
+.list-container .mat-mdc-list-item { /* Selector para Angular Material v15+ */
+  background-color: #2A2B37; /* Fondo ligeramente más claro para los items */
+  border-radius: 8px;
+  margin-bottom: 15px; /* Espacio entre items */
+  padding: 18px 20px !important; /* Ajustar padding del item */
+  color: #E0E0E0; /* Color de texto del item */
+  transition: transform 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  cursor: pointer;
+  border-left: 4px solid transparent; /* Borde izquierdo para efecto hover/activo */
+}
+
+.list-container .mat-mdc-list-item:hover,
+.list-container .list-item-hover:hover { /* Tu clase y la de Material */
+  background-color: #343545; /* Fondo más claro al hacer hover */
+  transform: translateY(-3px) scale(1.01); /* Efecto de elevación sutil */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border-left-color: #5e3ad4; /* Color primario en el borde izquierdo */
+}
+
+/* Icono dentro del list item */
+.list-container .mat-mdc-list-item .mat-icon.mat-list-icon, /* Selector para icono de lista */
+.list-container .mat-mdc-list-item mat-icon[matListItemIcon] { /* Selector para icono con directiva */
+  color: #5e3ad4; /* Color primario para los iconos */
+  font-size: 28px; /* Tamaño del icono */
+  height: 28px;
+  width: 28px;
+  margin-right: 20px !important; /* Más espacio a la derecha del icono */
+}
+
+/* Título del list item */
+.list-container .mat-mdc-list-item .mat-mdc-list-item-title,
+.list-container .mat-mdc-list-item div[matListItemTitle] {
+  font-family: 'Montserrat', sans-serif; /* O tu fuente de títulos */
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #FFFFFF; /* Color más brillante para el título del item */
+  margin-bottom: 4px; /* Pequeño espacio debajo del título */
+}
+
+/* Línea/descripción del list item */
+.list-container .mat-mdc-list-item .mat-mdc-list-item-line,
+.list-container .mat-mdc-list-item div[matListItemLine] {
+  font-family: 'Open Sans', sans-serif; /* O tu fuente de cuerpo */
+  font-size: 0.95rem;
+  color: #B0B0C0; /* Color de texto secundario/más suave */
+}
+
+/* Botón de "Volver" (si lo tienes como en la lista de espacios) */
+.list-container .back-button.mat-stroked-button {
+  display: flex; /* Para centrar contenido si es necesario */
+  align-items: center;
+  justify-content: center;
+  margin: 30px auto 10px auto; /* Centrado y con margen */
+  padding: 10px 25px;
+  border-color: #5e3ad4; /* Borde con color primario */
+  color: #5e3ad4; /* Texto con color primario */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 25px; /* Bordes redondeados */
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.list-container .back-button.mat-stroked-button:hover {
+  background-color: rgba(94, 58, 212, 0.1); /* Fondo sutil con color primario */
+  color: #7b5ee6; /* Color primario un poco más brillante */
+  border-color: #7b5ee6;
+  transform: translateY(-2px);
+}
+
+.list-container .back-button.mat-stroked-button mat-icon {
+  margin-right: 8px; /* Espacio entre icono y texto */
+}
+
+/* Para asegurar que los componentes de Angular Material hereden bien la fuente si es necesario */
+.list-container,
+.list-container mat-list,
+.list-container .mat-mdc-list-item {
+  font-family: 'Open Sans', sans-serif; /* Fuente base para el contenido de la lista */
+}

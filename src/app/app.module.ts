@@ -46,6 +46,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GestionarClaseHorarioDialogComponent } from './componentes/gestionar-clase-horario-dialog/gestionar-clase-horario-dialog.component';
+import { InfoGymComponent } from './componentes/info-gym/info-gym.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { GestionarClaseHorarioDialogComponent } from './componentes/gestionar-cl
     ListaSalasComponent,
     DetalleReservaClaseComponent,
     DetalleReservaSalaComponent,
-    GestionarClaseHorarioDialogComponent
+    GestionarClaseHorarioDialogComponent,
+    InfoGymComponent
   ],
   imports: [
     BrowserModule,
@@ -97,6 +99,7 @@ import { GestionarClaseHorarioDialogComponent } from './componentes/gestionar-cl
     MatNativeDateModule, 
     MatChipsModule,
     MatCardModule
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

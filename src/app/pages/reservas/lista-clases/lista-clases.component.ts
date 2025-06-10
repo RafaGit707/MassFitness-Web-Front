@@ -32,4 +32,27 @@ export class ListaClasesComponent implements OnInit {
     console.log('Navegando a detalle de clase con ID:', claseId);
     this.router.navigate(['/reservar/clase', claseId]);
   }
+
+   getImagenParaClase(clase: any): string {
+    // Lógica para determinar la imagen
+    // Opción 1: Si tienes una propiedad 'imagenUrl' directamente en el objeto clase
+    // if (clase.imagenUrl) {
+    //   return clase.imagenUrl;
+    // }
+
+    // Opción 2: Mapear por 'tipo_clase' o 'nombre' a imágenes locales o remotas
+    // Asegúrate de que las rutas a las imágenes sean correctas desde tu carpeta 'assets'
+    switch (clase.tipo_clase?.toLowerCase() || clase.nombre?.toLowerCase()) {
+      case 'boxeo':
+        return 'assets/boxeo.webp'; // Ejemplo de ruta
+      case 'yoga':
+        return 'assets/yoga.webp';
+      case 'spinning':
+        return 'assets/spinning.webp';
+      case 'zumba':
+        return 'assets/zumba.webp';
+      default:
+        return 'assets/fondosobre.webp'; // Una imagen por defecto
+    }
+  }
 }

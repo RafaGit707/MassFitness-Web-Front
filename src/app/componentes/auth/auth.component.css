@@ -477,6 +477,10 @@ header {
 /* Para pantallas menores a 768px (móviles) */
 @media (max-width: 768px) {
 
+    .topheader {
+        padding: 7px;
+    }
+
     .div-fondo {
         background-image: url("../../../assets/fondo-768.webp");
     }
@@ -528,11 +532,6 @@ header {
     .submit-btn {
         font-size: 15px;
     }
-    
-    .X2 {
-        width: 10px;
-        height: 10px;
-    }
 
     header nav ul li a {
         font-size: medium;
@@ -564,8 +563,8 @@ header {
     }
 
     .img-logo {
-        max-width: 60px;
-        max-height: 60px;
+        max-width: 65px;
+        max-height: 65px;
     }
 
     .user {
@@ -578,13 +577,17 @@ header {
 /* Para pantallas muy pequeñas (menores a 480px) */
 @media (max-width: 480px) {
 
+    .topheader {
+        padding: 3px;
+    }
+
     .form-container {
         padding: 24px;
-        width: 360px;
+        width: 350px;
     }
 
     .form-container h1 {
-        font-size: 20px;
+        font-size: 22px;
         margin-bottom: 18px;
         margin-top: 18px;
     }
@@ -594,13 +597,13 @@ header {
     }
 
     .form-group label {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 700;
         margin-bottom: 5px;
     }
 
     .form-group input {
-        font-size: 13px;
+        font-size: 14px;
         padding: 7px 0;
         width: 100%;
     }
@@ -608,36 +611,32 @@ header {
     #error_message {
         margin-top: 14px;
         margin-bottom: 14px;
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .cuenta_p {
         margin-top: 15px;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .registrarse {
         margin-top: 12px;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .submit-btn {
-        font-size: 15px;
+        font-size: 16px;
         padding: 9px;
     }
 
     .X1 {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
     }
     
     .X2 {
-        width: 9px;
-        height: 9px;
-    }
-
-    header nav ul li a {
-        font-size: small;
+        width: 10px;
+        height: 10px;
     }
 
     .img-titulo {
@@ -666,8 +665,8 @@ header {
     }
 
     .img-logo {
-        max-width: 50px;
-        max-height: 50px;
+        max-width: 60px;
+        max-height: 60px;
     }
 
     .user {
@@ -859,12 +858,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 10px 15px;
     border-bottom: 1px solid rgba(255,255,255,0.1); /* Separador sutil */
 }
 
 .mobile-menu-logo {
-    height: 50px; /* Ajusta según tu logo */
+    height: 60px; /* Ajusta según tu logo */
     width: auto;
 }
 
@@ -984,8 +983,6 @@ header {
     .img-titulo { margin: 25px; }
     .img-top { width: 80px; }
     .titulo-top { font-size: 1.7rem; }
-
-    .img-logo { max-width: 60px; max-height: 60px; }
     /* ...otros ajustes ... */
 }
 
@@ -997,7 +994,5 @@ header {
     .img-titulo { margin: 18px; }
     .img-top { width: 70px; }
     .titulo-top { font-size: 1.4rem; }
-
-    .img-logo { max-width: 50px; max-height: 50px; }
     /* ...otros ajustes ... */
 }

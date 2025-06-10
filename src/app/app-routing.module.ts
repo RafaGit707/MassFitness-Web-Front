@@ -10,6 +10,7 @@ import { ListaClasesComponent } from './pages/reservas/lista-clases/lista-clases
 import { ListaSalasComponent } from './pages/reservas/lista-salas/lista-salas.component';
 import { DetalleReservaClaseComponent } from './pages/reservas/detalle-reserva-clase/detalle-reserva-clase.component';
 import { DetalleReservaSalaComponent } from './pages/reservas/detalle-reserva-sala/detalle-reserva-sala.component';
+import { InfoGymComponent } from './componentes/info-gym/info-gym.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
     path: '',
     component: ScrollVideoComponent,
   },
+  // {
+  //   path: '',
+  //   component: InfoGymComponent,
+  // },
   {
     path: 'boxeo',
     component: ScrollVideoBoxeoComponent,

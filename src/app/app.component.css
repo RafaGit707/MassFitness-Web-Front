@@ -1,5 +1,5 @@
 main {
-    min-height: calc(100vh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
     z-index: 0;
     position: relative;
     background-color: white;

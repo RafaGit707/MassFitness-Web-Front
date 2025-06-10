@@ -1,0 +1,177 @@
+/* Estilos generales para los contenedores de listas (aplicar al componente o a un wrapper) */
+.list-container {
+  max-width: 800px;
+  margin: 40px auto;
+  margin-left: 30px;
+  margin-right: 30px;
+  padding: 25px 25px; /* Ajuste de padding */
+  background-color: #1F2029;
+  border-radius: 16px; /* Bordes más redondeados */
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(94, 58, 212, 0.2);
+  color: #F0F0F0;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-container h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem; /* Ligeramente más pequeño para balancear con items más grandes */
+  font-weight: 700;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 0.5px;
+  /* text-shadow: 0 0 10px rgba(94, 58, 212, 0.3); */ /* El shadow ya está en el contenedor */
+}
+
+/* Spinner y mensaje de no resultados (sin cambios significativos) */
+.list-container mat-spinner { margin: 40px auto; }
+.list-container mat-spinner circle { stroke: #5e3ad4; }
+.spinner-center { display: block !important; }
+
+.list-container .no-results p,
+.list-container div[fxLayoutAlign="center center"] p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #A0A0A0;
+    padding: 30px 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Estilos para mat-list */
+.list-container .clases-mat-list { /* Clase específica */
+  padding: 0;
+}
+
+/* ---- Estilos para cada ITEM DE CLASE ---- */
+.list-container .clase-list-item.mat-mdc-list-item { /* Clase específica para el item */
+  background-color: #2A2B37;
+  border-radius: 10px; /* Bordes redondeados para el item */
+  margin-bottom: 20px; /* Más espacio entre items */
+  padding: 0 !important; /* Quitamos padding para controlar con flexbox y contenedores internos */
+  color: #E0E0E0;
+  transition: transform 0.25s ease-out, background-color 0.25s ease-out, box-shadow 0.25s ease-out;
+  cursor: pointer;
+  overflow: hidden; /* Para que la imagen no se salga si tiene bordes redondeados */
+  display: flex !important; /* Usar Flexbox para alinear imagen y contenido */
+  align-items: stretch; /* Para que avatar y contenido tengan la misma altura */
+  min-height: 140px; /* Altura mínima para asegurar espacio para la imagen e info */
+}
+
+.list-container .clase-list-item.mat-mdc-list-item:hover {
+  background-color: #383A4C; /* Un hover más notable */
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  /* border-left-color: #5e3ad4; No es necesario si la imagen ya da el acento */
+}
+
+/* Contenedor del Avatar/Imagen de la Clase */
+.list-container .clase-item-avatar-container {
+  flex-shrink: 0; /* Para que el contenedor de la imagen no se encoja */
+  width: auto; /* Ancho fijo para la imagen (o 30%-40% del item) */
+  height: 100%; 
+  align-items: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 30%;
+  /* background-color: #333; */ /* Color de fondo si la imagen no carga o es transparente */
+}
+
+.list-container .clase-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cubre el área sin distorsionar, puede recortar */
+  object-position: right;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.list-container .clase-list-item.mat-mdc-list-item:hover .clase-item-image {
+    transform: scale(1.05); /* Sutil zoom a la imagen en hover */
+}
+
+
+/* Contenido Principal del Item (Texto) */
+.list-container .clase-item-content {
+  flex-grow: 1; /* Para que ocupe el espacio restante */
+  padding: 18px 20px; /* Padding interno para el texto */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrar verticalmente el contenido si hay espacio */
+}
+
+/* Título de la Clase */
+.list-container .clase-item-title.mat-mdc-list-item-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem; /* Un poco más grande */
+  font-weight: 700; /* Más audaz */
+  color: #FFFFFF;
+  margin-bottom: 8px; /* Más espacio */
+  line-height: 1.3;
+}
+
+/* Líneas de Información de la Clase */
+.list-container .clase-item-line.mat-mdc-list-item-line {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem; /* Un poco más pequeño para info secundaria */
+  color: #B8B8CC; /* Ligeramente más claro */
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+  margin-bottom: 6px; /* Espacio entre líneas */
+  line-height: 1.4;
+}
+.list-container .clase-item-line.mat-mdc-list-item-line:last-child {
+    margin-bottom: 0;
+}
+
+.list-container .clase-item-line mat-icon {
+  font-size: 18px; /* Tamaño de los iconos pequeños */
+  height: 18px;
+  width: 18px;
+  margin-right: 8px; /* Espacio entre icono y texto */
+  color: #7952B3; /* Un morado más suave para iconos de línea, o tu primario */
+}
+
+/* Descripción de la Clase */
+.list-container .clase-item-description.mat-mdc-list-item-line {
+  font-size: 0.85rem;
+  color: #A0A0B0;
+  margin-top: 8px; /* Espacio antes de la descripción */
+  line-height: 1.5;
+  /* white-space: normal; Ya debería serlo por defecto */
+}
+
+/* Indicador de Acción a la Derecha (Chevron) */
+.list-container .clase-item-action-indicator.mat-mdc-list-item-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px; /* Espacio para el chevron */
+  color: #5e3ad4; /* Color primario */
+  flex-shrink: 0;
+}
+.list-container .clase-item-action-indicator mat-icon {
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    transition: transform 0.2s ease-out;
+}
+.list-container .clase-list-item.mat-mdc-list-item:hover .clase-item-action-indicator mat-icon {
+    transform: translateX(5px); /* Pequeño movimiento del chevron en hover */
+}
+
+
+/* Botón de "Volver" (sin cambios, ya estaba bien) */
+.list-container .back-button.mat-stroked-button:hover {
+    background-color: rgba(94, 58, 212, 0.1); /* Fondo sutil con color primario /
+    color: #7b5ee6; / Color primario un poco más brillante */
+    border-color: #7b5ee6;
+    transform: translateY(-5px);
+}
+
+/* Fuente base (sin cambios) */
+.list-container,
+.list-container mat-list,
+.list-container .mat-mdc-list-item {
+  font-family: 'Open Sans', sans-serif;
+}

@@ -1,4 +1,5 @@
 /* PROYECTO REALIZADO POR RAFAEL GALVÁN CALVO */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,7 +16,7 @@ body.no-scroll {
 }
 
 :root {
-    --header-height: 80px;
+    --header-height: 90px;
     --scroll-y: 0;
 }
 

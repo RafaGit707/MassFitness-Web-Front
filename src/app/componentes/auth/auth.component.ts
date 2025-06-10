@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ModalAuthService } from 'src/app/servicios/modal-auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -46,8 +48,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription | null = null;
   private adminSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
+  private modalAuthSubscription: Subscription | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,  private modalAuthService: ModalAuthService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.userSubscription = this.authService.user$.subscribe(user => {
@@ -63,6 +66,15 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.adminSubscription = this.authService.isAdmin$.subscribe(isAdmin => {
         this.isAdmin = isAdmin;
         console.log('AuthComponent: Admin status change detected', isAdmin);
+    });
+
+    this.modalAuthSubscription = this.modalAuthService.abrirLoginModal$.subscribe(() => {
+      console.log('AuthComponent: Solicitud recibida para abrir modal de login.');
+      this.snackBar.open('Debes iniciar sesión para continuar.', 'Cerrar', {
+        duration: 3000,
+        verticalPosition: 'top'
+      });
+      this.openLogin(); // Llama a tu método existente para abrir el modal
     });
 
     this.routerSubscription = this.router.events.pipe(
@@ -84,128 +96,118 @@ export class AuthComponent implements OnInit, OnDestroy {
     // Initial state is set by the service constructor calling loadInitialAuthState()
   }
 
-configureHeaderState() {
-  if (!this.headerRef?.nativeElement) {
-    console.warn('Header element not available yet for configuration.');
-    // Se podría reintentar en ngAfterViewInit si esto sucede a menudo.
-    return;
-  }
-  const header = this.headerRef.nativeElement as HTMLElement;
-  const containerHeader = this.containerRef?.nativeElement as HTMLElement; // El contenedor de la "hero"
+  configureHeaderState() {
+    if (!this.headerRef?.nativeElement) {
+      console.warn('Header element not available yet for configuration.');
+      // Se podría reintentar en ngAfterViewInit si esto sucede a menudo.
+      return;
+    }
+    const header = this.headerRef.nativeElement as HTMLElement;
+    const containerHeader = this.containerRef?.nativeElement as HTMLElement; // El contenedor de la "hero"
 
-  // 1. Limpiar listener de scroll anterior si existe
-  if (this.scrollListener) {
-    window.removeEventListener('scroll', this.scrollListener);
-    this.scrollListener = null;
-    // console.log('Previous scroll listener removed.');
-  }
+    // 1. Limpiar listener de scroll anterior si existe
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener);
+      this.scrollListener = null;
+      // console.log('Previous scroll listener removed.');
+    }
 
-  // 2. Aplicar/Quitar clases y configurar listener según la página
-  if (this.isHomePage) {
-    // --- EN LA HOME PAGE ---
-    header.classList.remove('header-fixed');
-    containerHeader.removeAttribute('style');
+    // 2. Aplicar/Quitar clases y configurar listener según la página
+    if (this.isHomePage) {
+      // --- EN LA HOME PAGE ---
+      header.classList.remove('header-fixed');
+      containerHeader.removeAttribute('style');
 
-    // Definir la función de scroll para la home
-    // Guardamos la referencia a ESTA función para poder quitarla luego
-    this.scrollListener = () => {
-      if (!this.headerRef?.nativeElement || !this.containerRef?.nativeElement) return;
+      // Definir la función de scroll para la home
+      // Guardamos la referencia a ESTA función para poder quitarla luego
+      this.scrollListener = () => {
+        if (!this.headerRef?.nativeElement || !this.containerRef?.nativeElement) return;
 
-      const headerEl = this.headerRef.nativeElement;
-      const containerHeaderEl = this.containerRef.nativeElement;
+        const headerEl = this.headerRef.nativeElement;
+        const containerHeaderEl = this.containerRef.nativeElement;
 
-      // Condición para fijar: Cuando el final del containerHeader (hero) está a punto de salir
-      // o cuando se ha scrolleado más allá de su altura menos la altura del header.
-      // O una lógica más simple si el header siempre está al fondo del containerHeader.
-      // Tu lógica original:
-      const headerTop = headerEl.getBoundingClientRect().top;
-      const triggerHeight = window.innerHeight - headerEl.offsetHeight;
-      const scrollPosition = window.scrollY;
-      if (headerTop <= 0) {
-        headerEl.classList.add('header-fixed'); // Fijo cuando el header llega al top
-      }
+        // Condición para fijar: Cuando el final del containerHeader (hero) está a punto de salir
+        // o cuando se ha scrolleado más allá de su altura menos la altura del header.
+        // O una lógica más simple si el header siempre está al fondo del containerHeader.
+        // Tu lógica original:
+        const headerTop = headerEl.getBoundingClientRect().top;
+        const triggerHeight = window.innerHeight - headerEl.offsetHeight;
+        const scrollPosition = window.scrollY;
+        if (headerTop <= 0) {
+          headerEl.classList.add('header-fixed'); // Fijo cuando el header llega al top
+        }
 
-      if (scrollPosition <= triggerHeight) {
-        header.classList.remove('header-fixed');
-      }
+        if (scrollPosition <= triggerHeight) {
+          header.classList.remove('header-fixed');
+        }
 
-    };
-    window.addEventListener('scroll', this.scrollListener);
-    // console.log('Scroll listener ADDED for Home page.');
-    // Ejecutar una vez por si la página carga ya scrolleada en la home
-    this.scrollListener();
+      };
+      window.addEventListener('scroll', this.scrollListener);
+      // console.log('Scroll listener ADDED for Home page.');
+      // Ejecutar una vez por si la página carga ya scrolleada en la home
+      this.scrollListener();
 
-  } else {
-    // --- NO ES LA HOME PAGE ---
-    header.classList.add('header-fixed'); // Fijo desde el inicio
-    containerHeader.setAttribute('style', 'height: 0;'); // Aseguramos que no haya padding extra
-    // console.log('Header set to fixed for non-home page.');
-  }
-
-  this.updatePageContentPadding();
-}
-
-updatePageContentPadding() {
-  // Tu lógica de `updatePageContentPadding` es para ajustar el contenido principal
-  // que está DENTRO del `<router-outlet>`.
-  // Si el `<router-outlet>` está dentro de `div.container-header` y después del `<header>`,
-  // esta lógica podría necesitar ajustes.
-
-  // Si tu <router-outlet> está dentro de <main class="page-content"> que es HERMANO
-  // de <div class="container-header"> (como en mi sugerencia anterior), entonces:
-  const pageContent = document.querySelector('.page-content') as HTMLElement;
-  if (pageContent && this.headerRef?.nativeElement) {
-    if (!this.isHomePage) { // Solo en otras páginas (donde el header está fijo arriba)
-      const headerHeight = this.headerRef.nativeElement.offsetHeight;
-      // Si el router-outlet está directamente en el body o en un main principal
-      document.body.style.paddingTop = `${headerHeight}px`; // O pageContent.style.paddingTop
     } else {
-      document.body.style.paddingTop = '0px'; // O pageContent.style.paddingTop
+      // --- NO ES LA HOME PAGE ---
+      header.classList.add('header-fixed'); // Fijo desde el inicio
+      containerHeader.setAttribute('style', 'height: 0;'); // Aseguramos que no haya padding extra
+      // console.log('Header set to fixed for non-home page.');
+    }
+
+    this.updatePageContentPadding();
+  }
+
+  updatePageContentPadding() {
+    // Tu lógica de `updatePageContentPadding` es para ajustar el contenido principal
+    // que está DENTRO del `<router-outlet>`.
+    // Si el `<router-outlet>` está dentro de `div.container-header` y después del `<header>`,
+    // esta lógica podría necesitar ajustes.
+
+    // Si tu <router-outlet> está dentro de <main class="page-content"> que es HERMANO
+    // de <div class="container-header"> (como en mi sugerencia anterior), entonces:
+    const pageContent = document.querySelector('.page-content') as HTMLElement;
+    if (pageContent && this.headerRef?.nativeElement) {
+      if (!this.isHomePage) { // Solo en otras páginas (donde el header está fijo arriba)
+        const headerHeight = this.headerRef.nativeElement.offsetHeight;
+        // Si el router-outlet está directamente en el body o en un main principal
+        document.body.style.paddingTop = `${headerHeight}px`; // O pageContent.style.paddingTop
+      } else {
+        document.body.style.paddingTop = '0px'; // O pageContent.style.paddingTop
+      }
     }
   }
-}
 
-ngAfterViewInit() {
-  // this.getScrollValue(); // Si aún usas esto
-  // Se llama a configureHeaderState desde ngOnInit, pero una llamada aquí
-  // asegura que los elementos del DOM (headerRef, containerRef) existen.
-  if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
-    this.configureHeaderState();
-  } else {
-    // Podrías usar un setTimeout si a veces no están listos
-    setTimeout(() => {
-        if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
-            this.configureHeaderState();
-        }
-    }, 0);
+  ngAfterViewInit() {
+    this.getScrollValue();
+    // Se llama a configureHeaderState desde ngOnInit, pero una llamada aquí
+    // asegura que los elementos del DOM (headerRef, containerRef) existen.
+    if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
+      this.configureHeaderState();
+    } else {
+      // Podrías usar un setTimeout si a veces no están listos
+      setTimeout(() => {
+          if (this.headerRef?.nativeElement && this.containerRef?.nativeElement) {
+              this.configureHeaderState();
+          }
+      }, 0);
+    }
+    this.checkPasswordStrength(this.registroData.contrasena); // Asegurarse de que la validación de contraseña esté lista
   }
-  // this.checkPasswordStrength(...);
-}
 
-ngOnDestroy(): void {
-  this.userSubscription?.unsubscribe();
-  this.adminSubscription?.unsubscribe();
-  this.routerSubscription?.unsubscribe();
+  ngOnDestroy(): void {
+    this.userSubscription?.unsubscribe();
+    this.adminSubscription?.unsubscribe();
+    this.routerSubscription?.unsubscribe();
+    this.modalAuthSubscription?.unsubscribe();
 
-  if (this.scrollListener) {
-    window.removeEventListener('scroll', this.scrollListener);
-    this.scrollListener = null;
-    // console.log('Scroll listener removed on component destroy.');
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener);
+      this.scrollListener = null;
+      // console.log('Scroll listener removed on component destroy.');
+    }
+    document.body.classList.remove("no-scroll");
+    document.body.style.paddingTop = '0px'; // Resetear padding del body
   }
-  document.body.classList.remove("no-scroll");
-  document.body.style.paddingTop = '0px'; // Resetear padding del body
-}
-
-
-
-
-
-  // ngOnDestroy(): void {
-  //   // Unsubscribe to prevent memory leaks
-  //   this.userSubscription?.unsubscribe();
-  //   this.adminSubscription?.unsubscribe();
-  //   document.body.classList.remove("no-scroll");
-  // }
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -350,12 +352,6 @@ ngOnDestroy(): void {
     this.passwordValidation.special = /(?=.*[#$@!%&*?_])/.test(password);
     this.passwordValidation.valid = regex.test(password);
   }
-
-  // ngAfterViewInit() {
-  //   this.getScrollValue();    
-  //   this.setupScrollHeader();
-  //   this.checkPasswordStrength(this.registroData.contrasena);
-  // }
   
   getScrollValue() {
     let ticking = false;

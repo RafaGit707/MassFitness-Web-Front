@@ -1,10 +1,5 @@
 <div class="container-header" #containerHeader>
-    <!-- <div class="div-fondo"></div>
 
-    <section class="img-titulo">
-        <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-top" loading="lazy">
-        <h1 class="titulo-top">Bienvenidos a MassFitness</h1>
-    </section> -->
     <ng-container *ngIf="isHomePage"> <!-- Mostrar solo en la home -->
         <div class="div-fondo"></div>
         <section class="img-titulo">
@@ -75,7 +70,7 @@
                 </div>
             </div>    
         </div>
-        <img src="../assets/X-purple.png" class="mobile-menu-close" (click)="toggleMobileMenu()" alt="Cerrar menú">
+        <img src="../assets/X-purple.webp" class="mobile-menu-close" (click)="toggleMobileMenu()" alt="Cerrar menú">
     </div>
     <nav class="mobile-menu-nav">
         <ul>
@@ -136,7 +131,7 @@
             {{ isLoadingLogin ? 'Iniciando sesión...' : 'Iniciar sesión' }}
         </button>
         <p class="cuenta_p">¿No tienes cuenta?  <a href="#registro" class="registrarse" (click)="openRegister()">Registrarse</a></p>
-        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.png" class="X1" id="X1" loading="lazy"></a>
+        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.webp" class="X1" id="X1" loading="lazy"></a>
         </form>
     </div>
 </div>
@@ -187,19 +182,19 @@
         </div>
         <div id="error-message" class="password-rules" *ngIf="registroForm.controls['contrasena']?.touched || registroForm.controls['contrasena']?.value">
             <p class="message" [ngClass]="{'valid': passwordValidation.length, 'invalid': !passwordValidation.length}">
-                <img class="X2" [src]="passwordValidation.length ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe tener entre 8 y 16 caracteres
+                <img class="X2" [src]="passwordValidation.length ? 'assets/tick.webp' : 'assets/X.webp'" alt="Icon">La contraseña debe tener entre 8 y 16 caracteres
             </p>
             <p class="message" [ngClass]="{'valid': passwordValidation.lowercase, 'invalid': !passwordValidation.lowercase}">
-                <img class="X2" [src]="passwordValidation.lowercase ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos una letra minúscula
+                <img class="X2" [src]="passwordValidation.lowercase ? 'assets/tick.webp' : 'assets/X.webp'" alt="Icon">La contraseña debe contener al menos una letra minúscula
             </p>
             <p class="message" [ngClass]="{'valid': passwordValidation.uppercase, 'invalid': !passwordValidation.uppercase}">
-                <img class="X2" [src]="passwordValidation.uppercase ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos una letra mayúscula
+                <img class="X2" [src]="passwordValidation.uppercase ? 'assets/tick.webp' : 'assets/X.webp'" alt="Icon">La contraseña debe contener al menos una letra mayúscula
             </p>
             <p class="message" [ngClass]="{'valid': passwordValidation.number, 'invalid': !passwordValidation.number}">
-                <img class="X2" [src]="passwordValidation.number ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos un número
+                <img class="X2" [src]="passwordValidation.number ? 'assets/tick.webp' : 'assets/X.webp'" alt="Icon">La contraseña debe contener al menos un número
             </p>
             <p class="message" [ngClass]="{'valid': passwordValidation.special, 'invalid': !passwordValidation.special}">
-                <img class="X2" [src]="passwordValidation.special ? 'assets/tick.png' : 'assets/X.png'" alt="Icon">La contraseña debe contener al menos un carácter especial (#$&#64;!%&amp;*?_)
+                <img class="X2" [src]="passwordValidation.special ? 'assets/tick.webp' : 'assets/X.webp'" alt="Icon">La contraseña debe contener al menos un carácter especial (#$&#64;!%&amp;*?_)
             </p>
         </div>
         <button class="submit-btn" type="submit" [disabled]="isLoadingRegister || !registroForm.valid">
@@ -207,7 +202,7 @@
            {{ isLoadingRegister ? 'Cargando...' : 'Registrarse' }}
        </button>
         <p class="cuenta_p">¿Tienes cuenta? <a href="#mostrar" class="registrarse" (click)="openLogin()">Iniciar Sesion</a></p>
-        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.png" class="X1" id="X1"></a>
+        <a id="cerrar" class="cerrar" href="#" (click)="closeModals()"><img src="../assets/X-purple.webp" class="X1" id="X1"></a>
         </form>
     </div>
 </div>

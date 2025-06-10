@@ -1,22 +1,118 @@
-<div class="scroll-container">
-    <canvas #scrollCanvas loading="lazy"></canvas>
+<!-- <canvas #scrollCanvas class="scroll-canvas-element" loading="lazy"></canvas>
+
+
+<div class="content" #contentContainer>
+  <div class="parallax-container1" style="min-height: 100dvh;">
+    <div class="parallax-text1">
+      <h2>Elige tu Aventura</h2>
+      <p>Selecciona si deseas reservar una clase emocionante o un espacio para tu entrenamiento personalizado.</p>
+      <div class="botones-reserva">
+        <button (click)="navegarAReservaClases()" class="button-reservar">
+          Reservar Clase
+        </button>
+        <button (click)="navegarAReservaSalas()" class="button-reservar">
+          Reservar Espacio
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="content">
+<app-info-gym></app-info-gym> -->
+
+
+
+
+<!-- scroll-video.component.html -->
+
+<canvas #scrollCanvas class="scroll-canvas-element" loading="lazy"></canvas>
+
+<div class="content" #contentContainer>
+
     <div class="parallax-container1">
         <div class="parallax-text1">
-            <h2>Elige tu Aventura</h2>
-            <p>Selecciona si deseas reservar una clase emocionante o un espacio para tu entrenamiento personalizado.</p>
-
+            <h2>Explora y Reserva en MassFitness</h2>
+            <p>Tu aventura fitness comienza aquí. Elige qué te apetece hoy.</p>
             <div class="botones-reserva">
                 <button (click)="navegarAReservaClases()" class="button-reservar">
-                    Reservar Clase
+                Reservar Clase
                 </button>
                 <button (click)="navegarAReservaSalas()" class="button-reservar">
-                    Reservar Espacio
+                Reservar Espacio
                 </button>
             </div>
         </div>
     </div>
-    <!-- Puedes añadir más secciones parallax o contenido aquí -->
 </div>
+
+
+<app-info-gym></app-info-gym>
+
+  <!-- SECCIÓN 1: Bienvenida y Reservas Inmediatas -->
+  <section class="parallax-section2 welcome-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="parallax-text-block text-center-aligned"> <!-- Clase para centrar texto -->
+      <h2>Explora y Reserva en MassFitness</h2>
+      <p>Tu aventura fitness comienza aquí. Elige qué te apetece hoy.</p>
+      <div class="botones-reserva">
+        <button (click)="navegarAReservaClases()" class="button-reservar button-reservar-clase">
+          <mat-icon>fitness_center</mat-icon> Reservar Clase
+        </button>
+        <button (click)="navegarAReservaSalas()" class="button-reservar button-reservar-espacio">
+          <mat-icon>meeting_room</mat-icon> Reservar Espacio
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SECCIÓN 2: Información General del Gimnasio
+  <section class="parallax-section info-gym-section" style="min-height: 100vh;">
+    <div class="parallax-text-block text-left-aligned" style="top: 20vh;">
+      <h2>Sobre MassFitness</h2>
+      <p>En MassFitness, nos dedicamos a ofrecerte una experiencia de entrenamiento integral. Nuestras instalaciones de vanguardia, entrenadores expertos y una comunidad vibrante te esperan para ayudarte a alcanzar tus objetivos. Descubre un lugar donde la motivación y los resultados se encuentran.</p>
+      <p>Ofrecemos una amplia variedad de clases, espacios personalizables y un ambiente que te impulsará a superarte día a día.</p>
+    </div>
+  </section> -->
+
+  <!-- SECCIÓN 3: Detalle de Boxeo (Ejemplo) -->
+  <section class="parallax-section detalle-boxeo-section" style="min-height: 100vh;">
+    <div class="parallax-text-block text-right-aligned" style="top: 25vh;">
+      <h2><mat-icon>sports_mma</mat-icon> Descubre el Boxeo</h2>
+      <p>Nuestras clases de boxeo no son solo un entrenamiento, son una descarga de energía y una forma de construir fuerza, agilidad y confianza. Desde principiantes hasta avanzados, encontrarás un desafío a tu medida.</p>
+      <ul>
+        <li>Técnicas fundamentales y avanzadas.</li>
+        <li>Entrenamiento cardiovascular intenso.</li>
+        <li>Mejora de la coordinación y reflejos.</li>
+      </ul>
+      <button (click)="navegarAReservaClases()" class="button-reservar button-ver-clases-boxeo">
+        Ver Clases de Boxeo
+      </button>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: Detalle de Yoga (Ejemplo)
+  <section class="parallax-section detalle-yoga-section" style="min-height: 100vh;">
+    <div class="parallax-text-block text-left-aligned" style="top: 30vh;">
+      <h2><mat-icon>self_improvement</mat-icon> Encuentra tu Paz: Yoga</h2>
+      <p>Conecta cuerpo y mente en nuestras clases de yoga. Ofrecemos diversos estilos, desde Vinyasa dinámico hasta Yin restaurativo, para ayudarte a mejorar tu flexibilidad, fuerza y equilibrio interior.</p>
+      <ul>
+        <li>Reducción del estrés y ansiedad.</li>
+        <li>Aumento de la flexibilidad y movilidad.</li>
+        <li>Fortalecimiento del core y equilibrio.</li>
+      </ul>
+      <button (click)="navegarAReservaClases()" class="button-reservar button-ver-clases-yoga">
+        Ver Clases de Yoga
+      </button>
+    </div>
+  </section>
+
+  SECCIÓN 5: Entrenadores (Llamada a la acción para la nueva página)
+  <section class="parallax-section entrenadores-cta-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="parallax-text-block text-center-aligned">
+      <h2>Conoce a Nuestros Expertos</h2>
+      <p>Un equipo de entrenadores apasionados y certificados está listo para guiarte en cada paso de tu transformación.</p>
+      <button (click)="navegarAEntrenadores()" class="button-reservar button-conocer-entrenadores">
+        <mat-icon>groups</mat-icon> Ver Entrenadores
+      </button>
+    </div>
+  </section> -->

@@ -47,7 +47,6 @@
 .horarios-container {
   margin-top: 20px;
   padding: 15px;
-  background-color: #f9f9f9;
   border-radius: 4px;
 }
 
@@ -133,4 +132,360 @@
 }
 .mat-mdc-standard-chip.chip-seleccionado .chip-capacidad-info { /* Para que se vea bien cuando el chip está seleccionado */
     color: rgba(255, 255, 255, 0.8);
+}
+
+
+
+
+
+
+
+/* detalle-reserva-sala.component.css */
+
+/* --- Contenedor Principal de la Página --- */
+.reserva-detail-container {
+  max-width: 900px; /* Un ancho máximo para el contenido principal */
+  margin: 30px auto; /* Centrado y con margen */
+  padding: 20px;
+  color: #F0F0F0; /* Color de texto base */
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* --- Sección del Encabezado (Botón de Volver y Título) --- */
+.header-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.header-section .back-button {
+  color: #e0e0e0; /* Color del icono de volver */
+  margin-right: 10px;
+}
+.header-section .back-button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+.header-section .back-button mat-icon {
+  font-size: 28px; /* Tamaño del icono de flecha */
+  height: 28px;
+  width: 28px;
+}
+
+.header-section h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0; /* Quitar margen por defecto del h1 */
+  line-height: 1.2;
+}
+
+/* --- Tarjeta de Información de la Sala --- */
+.info-card {
+  background-color: #1F2029; /* Fondo oscuro para la tarjeta */
+  color: #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 1px solid rgba(94, 58, 212, 0.2); /* Borde sutil con color primario */
+}
+
+.info-card .mat-mdc-card-header { /* Estilo para el header de mat-card */
+  padding: 20px 24px 16px 24px;
+}
+.info-card .mat-mdc-card-title { /* Estilo para el título dentro del card-header */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+.info-card .mat-mdc-card-content {
+  padding: 0 24px 20px 24px;
+  font-size: 1rem;
+}
+.info-card .mat-mdc-card-content p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.info-card .mat-mdc-card-content strong {
+  color: #c0c0c0; /* Resaltar etiquetas */
+  font-weight: 600;
+}
+
+
+/* --- Tarjeta del Planificador (Scheduler) --- */
+.scheduler-card {
+  background-color: #1F2029;
+  color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 1px solid rgba(94, 58, 212, 0.2);
+}
+
+.scheduler-card .mat-mdc-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem; /* Ligeramente más pequeño */
+  font-weight: 600;
+  color: #FFFFFF;
+  padding: 20px 24px 0px 24px; /* Ajustar padding */
+  margin-bottom: 5px;
+}
+.scheduler-card .mat-mdc-card-title span { /* Para el texto de reservas restantes */
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #a0a0c0;
+  display: block; /* Para que esté en una nueva línea o ajustar con flex si se quiere al lado */
+  margin-top: 4px;
+}
+
+.scheduler-card .mat-mdc-card-content {
+  padding: 16px 24px 24px 24px;
+}
+
+/* Datepicker */
+.datepicker-field {
+  margin-bottom: 25px;
+}
+:host ::ng-deep .datepicker-field .mat-mdc-label,
+:host ::ng-deep .datepicker-field .mat-mdc-datepicker-toggle-default-icon {
+  color: #e0e0e0 !important; /* Color del texto y el icono del calendario */
+}
+:host ::ng-deep .datepicker-field .mat-mdc-form-field-focus-overlay {
+  background-color: rgba(94, 58, 212, 0.3) !important; /* Color del foco */
+}
+:host ::ng-deep .mat-datepicker-content { /* Estilos para el popup del calendario */
+    background-color: #2A2B37;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+:host ::ng-deep .mat-datepicker-content .mat-calendar-body-label,
+:host ::ng-deep .mat-datepicker-content .mat-calendar-table-header,
+:host ::ng-deep .mat-datepicker-content .mat-calendar-body-cell-content,
+:host ::ng-deep .mat-datepicker-content .mat-calendar-arrow,
+:host ::ng-deep .mat-datepicker-content .mat-calendar-period-button {
+    color: #e0e0e0;
+}
+:host ::ng-deep .mat-datepicker-content .mat-calendar-body-selected {
+    background-color: #5e3ad4; /* Primario */
+    color: white;
+}
+:host ::ng-deep .mat-datepicker-content .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    border-color: rgba(94, 58, 212, 0.5);
+}
+
+
+/* Contenedor de Horarios */
+.horarios-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+  gap: 15px;
+  color: #a0a0c0;
+}
+.horarios-loading mat-spinner circle { stroke: #5e3ad4; }
+
+.horarios-container {
+  margin-top: 20px;
+}
+.horarios-container > p strong { /* "Horarios Disponibles para..." */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  color: #FFFFFF;
+  display: block;
+  margin-bottom: 15px;
+}
+
+/* Chip Listbox y Chips */
+.hora-selector.mat-mdc-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; /* Espacio entre chips */
+  margin-bottom: 20px;
+}
+
+.mat-mdc-chip-option { /* Estilo base para los chips */
+  background-color: #343545 !important; /* Color base para disponibles */
+  color: #e0e0e0 !important;
+  border-radius: 20px !important; /* Más redondeados */
+  padding: 10px 18px !important; /* Más padding */
+  font-size: 0.95rem !important;
+  transition: all 0.2s ease-out !important;
+  border: 1px solid transparent !important;
+}
+
+.mdc-evolution-chip__text-label .mat-mdc-chip-action-label {
+  color: white;
+}
+
+span {
+  color: white;
+}
+
+.mat-mdc-standard-chip, .mat-mdc-standard-chip .mdc-evolution-chip__action--primary, .mat-mdc-standard-chip .mat-mdc-chip-action-label {
+  color: white;
+}
+
+
+/* Chip Seleccionado */
+.mat-mdc-chip-option.mat-mdc-chip-selected,
+.mat-mdc-chip-option[aria-selected="true"] {
+  background-color: #5e3ad4 !important; /* Color primario */
+  color: white !important;
+  border-color: #4a2ead !important; /* Borde ligeramente más oscuro */
+}
+.mat-mdc-chip-option.mat-mdc-chip-selected .chip-capacity-info,
+.mat-mdc-chip-option.mat-mdc-chip-selected .chip-status-text,
+.mat-mdc-chip-option.mat-mdc-chip-selected .chip-no-disponible-text {
+  color: rgba(255,255,255,0.85) !important; /* Texto de info más suave en chip seleccionado */
+}
+
+/* Chip de Acento (si usas color="accent" para disponibles y no ocupados) */
+/* Si color="accent" no es el primario, puedes definir aquí un color específico */
+/* .mat-mdc-chip-option.mat-accent {
+  background-color: #00bfa5 !important; /* Ejemplo: un verde azulado para disponibles */
+/* color: white !important;
+} */
+
+
+/* Chip deshabilitado general (por límite de usuario o no disponible para él) */
+.mat-mdc-chip-option.mat-mdc-chip-disabled,
+.mat-mdc-chip-option[aria-disabled="true"] {
+  background-color: #40424E !important; /* Un gris más oscuro */
+  color: #707280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+.mat-mdc-chip-option.mat-mdc-chip-disabled .chip-capacity-info {
+    display: none; /* Ocultar capacidad si no es relevante */
+}
+
+
+/* Clases específicas para estados (tus clases existentes) */
+.chip-no-disponible { /* Slot lleno por otros */
+  background-color: #4a4c57 !important; /* Gris oscuro */
+  color: #8a91a0 !important;
+  opacity: 0.8 !important;
+}
+.chip-no-disponible .chip-status-text {
+    font-weight: 500;
+}
+
+.chip-limite-alcanzado { /* Límite de usuario o no disponible para él, pero no lleno por otros */
+  background-color: #503e32 !important; /* Un marrón/naranja oscuro sutil */
+  color: #a1887f !important;
+  border: 1px dashed #a1887f !important;
+}
+
+.chip-user-ya-reservado:not(.mat-mdc-chip-selected) { /* Usuario ya tiene este horario, pero no está seleccionado en la UI actual */
+  border: 2px solid #5e3ad4 !important; /* Borde primario para destacarlo */
+  background-color: #2f234d !important; /* Un morado oscuro de fondo */
+  color: #d1c4e9 !important; /* Texto morado claro */
+}
+.chip-user-ya-reservado:not(.mat-mdc-chip-selected) .chip-status-text {
+    color: #d1c4e9 !important;
+    font-weight: 600;
+}
+
+
+/* Información de capacidad y estado dentro del chip */
+.chip-capacity-info {
+  font-size: 0.8em;
+  margin-left: 6px;
+  color: #a0a0c0; /* Color base para info de capacidad */
+  font-style: italic;
+}
+.chip-status-text, .chip-no-disponible-text {
+  font-size: 0.8em;
+  margin-left: 4px;
+  font-weight: 500;
+  color: #a0a0c0; /* Color base para texto de estado */
+}
+
+/* Icono de check en chip seleccionado */
+.chip-selected-icon.mat-icon {
+  font-size: 18px !important;
+  height: 18px !important;
+  width: 18px !important;
+  margin-left: 8px !important;
+  color: white !important; /* Asegurar que sea visible en el fondo primario */
+}
+
+/* Información de horas seleccionadas */
+.seleccion-info {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #c0c0c0;
+}
+
+/* Mensaje de no horarios */
+.no-horarios p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #A0A0A0;
+  padding: 20px 0;
+}
+
+/* --- Acciones de la Tarjeta (Botón Confirmar) --- */
+.scheduler-card .mat-mdc-card-actions {
+  padding: 8px 24px 20px 24px; /* Ajustar padding */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 10px;
+}
+
+.scheduler-card .mat-mdc-card-actions button[mat-flat-button] {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 10px 24px; /* Botón más grande */
+  border-radius: 25px; /* Botón redondeado */
+  /* color: white; Ya lo da el color="primary" de Material */
+  /* background-color: #5e3ad4; Ya lo da el color="primary" */
+}
+.scheduler-card .mat-mdc-card-actions button[mat-flat-button] mat-icon {
+  margin-right: 8px;
+}
+.scheduler-card .mat-mdc-card-actions button[mat-flat-button]:disabled {
+  background-color: rgba(94, 58, 212, 0.4) !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+/* --- Template de Sala No Encontrada y Cargando --- */
+.not-found-container, .page-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh; /* Para que ocupe espacio en la pantalla */
+  text-align: center;
+  padding: 20px;
+}
+.not-found-container h2, .page-loading-spinner p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+}
+.page-loading-spinner p { font-size: 1.2rem; margin-top: 20px; color: #a0a0c0;}
+
+.not-found-container p {
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  margin-bottom: 25px;
+}
+.not-found-container button[mat-stroked-button] {
+  border-color: #5e3ad4;
+  color: #5e3ad4;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+}
+.not-found-container button[mat-stroked-button]:hover {
+  background-color: rgba(94, 58, 212, 0.1);
+}
+
+.page-loading-spinner mat-spinner circle {
+  stroke: #5e3ad4; /* Color primario para el spinner */
 }

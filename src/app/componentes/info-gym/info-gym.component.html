@@ -16,3 +16,56 @@
         </div>
     </div>
 </div>
+
+<!-- info-gym.component.html (o como se llame tu componente parallax) -->
+<div class="info-gym-main-container"> <!-- Un wrapper general si es necesario -->
+
+  <!-- FONDO PARALLAX (si lo manejas separado del .parallax-container) -->
+  <!-- <div class="fixed-parallax-background"></div> -->
+
+  <div class="parallax-container" #parallaxContainerElement> <!-- Tu contenedor principal con la imagen de fondo móvil -->
+
+    <!-- === NUEVOS BLOQUES AÑADIDOS === -->
+
+    <!-- BLOQUE 3: FILOSOFÍA / SOBRE MASSFITNESS -->
+    <div class="parallax-container2">
+      <div class="parallax-text">
+        <mat-icon class="text-block-icon">favorite_border</mat-icon>
+        <h2>Nuestra Esencia: MassFitness</h2>
+        <p>Somos más que un gimnasio; somos una comunidad vibrante dedicada a tu bienestar integral. Creemos en el poder del movimiento para transformar vidas, ofreciendo un ambiente motivador donde cada socio es valorado y apoyado en su camino hacia una versión más fuerte y saludable de sí mismo.</p>
+        <p><strong>Tu meta es nuestra misión.</strong></p>
+      </div>
+    </div>
+
+    <!-- BLOQUE 4: INSTALACIONES -->
+    <div class="parallax-container2">
+      <div class="parallax-text">
+        <mat-icon class="text-block-icon">maps_home_work</mat-icon>
+        <h2>Instalaciones de Primer Nivel</h2>
+        <p>Entrena en un entorno diseñado para la excelencia. Contamos con equipamiento de última generación, amplias zonas especializadas y un ambiente impecable para que cada sesión sea productiva y placentera.</p>
+        <ul>
+          <li>Zona Cardio con vistas y conectividad.</li>
+          <li>Área de Musculación con maquinaria selectora y peso libre.</li>
+          <li>Estudios para Clases Dirigidas (Boxeo, Yoga, HIIT, Spinning).</li>
+          <li>Espacios de Entrenamiento Funcional y Cross-Training.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BLOQUE 5: CTA ENTRENADORES -->
+    <div class="parallax-container2">
+      <div class="parallax-text">
+        <mat-icon class="text-block-icon">groups</mat-icon>
+        <h2>Conoce a Nuestros Expertos</h2>
+        <p>Nuestro equipo de entrenadores certificados está aquí para guiarte, inspirarte y ayudarte a alcanzar tus objetivos con planes personalizados y la motivación que necesitas.</p>
+        <p>Descubre quiénes son y cómo pueden potenciar tu entrenamiento.</p>
+        <button (click)="navegarAEntrenadores()" class="button-reservar">
+          Ver Entrenadores
+        </button>
+      </div>
+    </div>
+
+  </div> <!-- Fin de .parallax-container -->
+
+</div>
+<app-lista-entrenadores></app-lista-entrenadores>

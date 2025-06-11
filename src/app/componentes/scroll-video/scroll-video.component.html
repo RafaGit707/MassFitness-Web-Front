@@ -1,35 +1,23 @@
-<!-- <canvas #scrollCanvas class="scroll-canvas-element" loading="lazy"></canvas>
-
-
-<div class="content" #contentContainer>
-  <div class="parallax-container1" style="min-height: 100dvh;">
-    <div class="parallax-text1">
-      <h2>Elige tu Aventura</h2>
-      <p>Selecciona si deseas reservar una clase emocionante o un espacio para tu entrenamiento personalizado.</p>
-      <div class="botones-reserva">
-        <button (click)="navegarAReservaClases()" class="button-reservar">
-          Reservar Clase
-        </button>
-        <button (click)="navegarAReservaSalas()" class="button-reservar">
-          Reservar Espacio
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<app-info-gym></app-info-gym> -->
-
-
-
-
-<!-- scroll-video.component.html -->
-
 <canvas #scrollCanvas class="scroll-canvas-element" loading="lazy"></canvas>
 
 <div class="content" #contentContainer>
-
-    <div class="parallax-container1">
+      <div class="parallax-container1">
+        <div class="parallax-text1">
+            <h2>Bienvenido a MassFitness: Tu Transformación Comienza Hoy</h2>
+            <p>Descubre un espacio donde la energía te impulsa y tus metas se hacen realidad. En MassFitness, te ofrecemos todo lo que necesitas para forjar la mejor versión de ti mismo.</p>
+            <br>
+            <p>¿Listo para el desafío? Elige tu camino:</p>
+            <div class="botones-reserva">
+                <button (click)="navegarAReservaClases()" class="button-reservar">
+                Reservar Clase
+                </button>
+                <button (click)="navegarAReservaSalas()" class="button-reservar">
+                Reservar Espacio
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="parallax-container1">
         <div class="parallax-text1">
             <h2>Explora y Reserva en MassFitness</h2>
             <p>Tu aventura fitness comienza aquí. Elige qué te apetece hoy.</p>
@@ -42,35 +30,50 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 
 <app-info-gym></app-info-gym>
 
   <!-- SECCIÓN 1: Bienvenida y Reservas Inmediatas -->
-  <section class="parallax-section2 welcome-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <div class="parallax-text-block text-center-aligned"> <!-- Clase para centrar texto -->
-      <h2>Explora y Reserva en MassFitness</h2>
-      <p>Tu aventura fitness comienza aquí. Elige qué te apetece hoy.</p>
+  <!-- <section class="parallax-section2 welcome-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="parallax-text-block text-center-aligned">
+      <h2>Bienvenido a MassFitness: Tu Transformación Comienza Hoy</h2>
+      <p>Descubre un espacio donde la energía te impulsa y tus metas se hacen realidad. En MassFitness, te ofrecemos todo lo que necesitas para forjar la mejor versión de ti mismo.</p>
+      <p>¿Listo para el desafío? Elige tu camino:</p>
       <div class="botones-reserva">
         <button (click)="navegarAReservaClases()" class="button-reservar button-reservar-clase">
-          <mat-icon>fitness_center</mat-icon> Reservar Clase
+          <mat-icon>fitness_center</mat-icon> Explora Nuestras Clases
         </button>
         <button (click)="navegarAReservaSalas()" class="button-reservar button-reservar-espacio">
-          <mat-icon>meeting_room</mat-icon> Reservar Espacio
+          <mat-icon>meeting_room</mat-icon> Reserva Tu Espacio
         </button>
       </div>
     </div>
   </section>
 
 
-  <!-- SECCIÓN 2: Información General del Gimnasio
-  <section class="parallax-section info-gym-section" style="min-height: 100vh;">
+  SECCIÓN 2: Información General del Gimnasio -->
+  <!-- <section class="parallax-section info-gym-section" style="min-height: 100vh;">
     <div class="parallax-text-block text-left-aligned" style="top: 20vh;">
       <h2>Sobre MassFitness</h2>
       <p>En MassFitness, nos dedicamos a ofrecerte una experiencia de entrenamiento integral. Nuestras instalaciones de vanguardia, entrenadores expertos y una comunidad vibrante te esperan para ayudarte a alcanzar tus objetivos. Descubre un lugar donde la motivación y los resultados se encuentran.</p>
       <p>Ofrecemos una amplia variedad de clases, espacios personalizables y un ambiente que te impulsará a superarte día a día.</p>
+    </div>
+  </section> -->
+
+   <!-- <section class="parallax-section info-gym-section" style="min-height: 120vh;">
+    <div class="parallax-text-block text-left-aligned" style="top: 20vh; max-width: 700px;">
+      <h2><mat-icon>favorite_border</mat-icon> Más que un Gimnasio, una Comunidad</h2>
+      <p>En MassFitness, creemos que el fitness es un viaje personal apoyado por una comunidad fuerte. No se trata solo de levantar pesas o correr en una cinta; se trata de descubrir tu potencial, superar tus límites y celebrar cada logro, grande o pequeño.</p>
+      <p>Nuestra filosofía se centra en tres pilares:</p>
+      <ul>
+        <li><strong>Entrenamiento de Vanguardia:</strong> Acceso a equipamiento de última generación y una variedad de clases innovadoras diseñadas para todos los niveles y objetivos.</li>
+        <li><strong>Expertos Apasionados:</strong> Un equipo de entrenadores certificados y dedicados, listos para guiarte, motivarte y asegurar que entrenes de forma segura y efectiva.</li>
+        <li><strong>Ambiente Inclusivo:</strong> Un espacio acogedor y energizante donde te sentirás bienvenido, apoyado y parte de algo más grande. ¡Aquí, cada miembro cuenta!</li>
+      </ul>
+      <p>Únete a nosotros y experimenta la diferencia MassFitness. Tu bienestar es nuestra prioridad.</p>
     </div>
   </section> -->
 

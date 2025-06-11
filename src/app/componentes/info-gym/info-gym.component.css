@@ -5,7 +5,8 @@
     position: relative;
     min-height: 100dvh;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column; /* Asegura apilamiento vertical de los bloques */
+    align-items: center; /* Centra los bloques horizontalmente */
     justify-content: center;
     text-align: center;
     background-image: url("/assets/fondosobre.webp");
@@ -20,10 +21,10 @@
     position: relative;
     height: 100dvh;
     min-height: max-content;
-    width: 50%;
+    max-width: 65%;
     display: flex;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
     will-change: transform;
 }
 
@@ -47,8 +48,8 @@
 
 .parallax-text {
     position: sticky;
-    top: 30vh;
-    background: white;
+    top: 25vh;
+    background:white;
     color: black;
     margin: 60px;
     padding: 50px 80px 50px 80px;   
@@ -127,4 +128,64 @@
         margin: 30px;
     }
 
+}
+
+
+
+
+
+
+/* info-gym.component.css o tu archivo CSS principal para esta sección */
+
+.parallax-text .text-block-icon { /* Icono opcional encima del título */
+  display: block;
+  font-size: 2.8rem;
+  color: #5e3ad4; /* Tu color primario */
+  margin-bottom: 15px;
+  text-align: center; /* Centrar el icono si el texto está centrado */
+}
+/* Si el bloque de texto está centrado: */
+.parallax-container2.text-center .parallax-text {
+    text-align: center;
+}
+.parallax-container2.text-center .parallax-text .text-block-icon {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.parallax-text h2 {
+  font-family: 'Montserrat', sans-serif; /* O tu fuente de títulos */
+  font-size: 1.8rem; /* Ajustado */
+  font-weight: 700;
+  color: #1F2029; /* Un color oscuro pero no negro puro */
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.parallax-text p {
+  line-height: 1.65;
+  margin-bottom: 15px;
+}
+
+.parallax-text ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.parallax-text ul li {
+  padding-left: 28px;
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+.parallax-text ul li::before {
+  content: '✓';
+  color: #5e3ad4;
+  position: absolute;
+  left: 0;
+  top: 1px; /* Ajuste fino vertical */
+  font-weight: bold;
+  font-size: 1.2em;
 }

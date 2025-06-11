@@ -16,8 +16,7 @@
             </a>
             <nav class="nav-enlaces nav-enlaces-desktop">
                 <ul>
-                    <!-- <li><a routerLink="/servicios">Servicios</a></li>
-                    <li class="nav-item dropdown-container"
+                    <!-- <li class="nav-item dropdown-container"
                         (mouseenter)="showClasesDropdownDesktop = true" (mouseleave)="showClasesDropdownDesktop = false">
                     <a class="enlaces has-dropdown" (click)="toggleClasesDropdownDesktop()" [class.active]="showClasesDropdownDesktop">
                         Clases <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
@@ -101,7 +100,6 @@
                         </div>
                     </li>
 
-                    <li><a routerLink="/boxeo">Boxeo</a></li>
                     <li><a routerLink="#" (click)="scrollToContact('#contacto')">Contacto</a></li>
                     </ul>
                 </nav>
@@ -119,7 +117,6 @@
                             </button>
                         </li>
                         <li class="user-sesion" *ngIf="loggedIn">
-                            <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span>
                             <button (click)="logout()" type="button" class="button-cerrar-sesion">Cerrar sesión</button>
                             <a *ngIf="isAdmin" routerLink="/admin-dashboard" class="enlaces-admin button-admin-panel">Admin Panel</a>
                         </li>
@@ -205,8 +202,7 @@
             </li>
 
             <!-- Tus otros enlaces móviles (Servicios, Boxeo, Contacto) -->
-            <li><a routerLink="/servicios" (click)="closeMenuAndNavigate()"><mat-icon>miscellaneous_services</mat-icon>Servicios</a></li>
-            <li><a routerLink="/boxeo" (click)="closeMenuAndNavigate()"><mat-icon>sports_mma</mat-icon>Boxeo</a></li>
+            <li><a routerLink="/" (click)="closeMenuAndNavigate()"><mat-icon>miscellaneous_services</mat-icon>Servicios</a></li>
             <li><a (click)="closeMenuAndNavigate('#contacto')"><mat-icon>contact_support</mat-icon>Contacto</a></li>
 
             <!-- ... (resto de tu menú móvil, hr, botones de sesión, etc.) ... -->

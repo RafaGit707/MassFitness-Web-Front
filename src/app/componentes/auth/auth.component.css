@@ -7,7 +7,7 @@ body.no-scroll {
 .img-logo {
     width: 70px;
     height: auto;
-    margin-left: 20px;
+    margin-left: 16px;
 }
 
 .container-header {
@@ -741,12 +741,6 @@ header {
     /* flex-grow: 1; No siempre es necesario, depende del comportamiento deseado */
 }
 
-.img-logo {
-    width: 70px; /* O tus valores de Vue: max-width: 70px; max-height: 70px; */
-    height: auto;
-    margin-right: 15px; /* Espacio entre logo y enlaces */
-}
-
 .nav-enlaces ul { /* Tus estilos para ul */
     list-style: none;
     display: flex;
@@ -1284,7 +1278,7 @@ header.header-fixed {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 25px; /* Espacio entre "Clases", "Espacios", "Servicios"... */
+  gap: 20px; /* Espacio entre "Clases", "Espacios", "Servicios"... */
   padding: 0;
   margin: 0;
 }

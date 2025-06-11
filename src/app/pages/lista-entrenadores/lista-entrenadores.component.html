@@ -1,0 +1,31 @@
+<div class="entrenadores-page-container">
+  <div class="header-section"> <!-- Similar al que usas en otras páginas de detalle -->
+    <button mat-icon-button routerLink="/" aria-label="Volver a inicio" class="back-button-page">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Nuestro Equipo de Expertos</h1>
+  </div>
+  <p class="page-subtitle">Conoce a los profesionales dedicados a potenciar tu rendimiento y bienestar.</p>
+
+  <mat-spinner *ngIf="isLoading" diameter="60"></mat-spinner>
+
+  <div *ngIf="!isLoading && entrenadores.length === 0" class="no-results-entrenadores">
+    <p>No hay información de entrenadores disponible en este momento.</p>
+  </div>
+
+  <div class="entrenadores-grid" *ngIf="!isLoading && entrenadores.length > 0">
+    <mat-card *ngFor="let entrenador of entrenadores" class="entrenador-card">
+      <img mat-card-image [src]="getFotoEntrenador(entrenador)" alt="Foto de {{ entrenador.nombre_entrenador }}" class="entrenador-foto">
+      <mat-card-header>
+        <mat-card-title>{{ entrenador.nombre_entrenador }}</mat-card-title>
+        <mat-card-subtitle>{{ entrenador.especializacion }}</mat-card-subtitle>
+      </mat-card-header>
+      <!-- <mat-card-content *ngIf="entrenador.especializacion">
+        <p>{{ entrenador.especializacion }}</p>
+      </mat-card-content> -->
+      <mat-card-actions align="end">
+        <!-- <button mat-stroked-button color="primary">Ver Más</button> -->
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

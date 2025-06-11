@@ -47,6 +47,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GestionarClaseHorarioDialogComponent } from './componentes/gestionar-clase-horario-dialog/gestionar-clase-horario-dialog.component';
 import { InfoGymComponent } from './componentes/info-gym/info-gym.component';
+import { ListaEntrenadoresComponent } from './pages/lista-entrenadores/lista-entrenadores.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { InfoGymComponent } from './componentes/info-gym/info-gym.component';
     DetalleReservaClaseComponent,
     DetalleReservaSalaComponent,
     GestionarClaseHorarioDialogComponent,
-    InfoGymComponent
+    InfoGymComponent,
+    ListaEntrenadoresComponent
   ],
   imports: [
     BrowserModule,

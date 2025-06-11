@@ -11,6 +11,7 @@ import { ListaSalasComponent } from './pages/reservas/lista-salas/lista-salas.co
 import { DetalleReservaClaseComponent } from './pages/reservas/detalle-reserva-clase/detalle-reserva-clase.component';
 import { DetalleReservaSalaComponent } from './pages/reservas/detalle-reserva-sala/detalle-reserva-sala.component';
 import { InfoGymComponent } from './componentes/info-gym/info-gym.component';
+import { ListaEntrenadoresComponent } from './pages/lista-entrenadores/lista-entrenadores.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   //   path: '',
   //   component: InfoGymComponent,
   // },
+  { path: 'entrenadores', component: ListaEntrenadoresComponent },
   {
     path: 'boxeo',
     component: ScrollVideoBoxeoComponent,

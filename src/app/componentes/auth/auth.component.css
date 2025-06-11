@@ -7,14 +7,15 @@ body.no-scroll {
 .img-logo {
     width: 70px;
     height: auto;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .container-header {
     display: flex;
     position: relative;
-    max-width: 100%;
+    width: 100%;
     height: 100dvh;
+    max-width: 100%;
     overflow: hidden;
     z-index: 1;
     justify-content: flex-start;
@@ -34,6 +35,7 @@ body.no-scroll {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    overflow: hidden;
     z-index: 0;
     will-change: transform;
 }
@@ -150,16 +152,16 @@ body.no-scroll {
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.9);
 }
 
-.ul {
+/* ul {
     list-style: none;
     display: flex;
     gap: 20px;
-}
+} */
 
-.ul li a {
+/* ul li a {
     color: white;
     text-decoration: none;
-}
+} */
 
 header {
     position: absolute;
@@ -182,9 +184,9 @@ header {
 }
 
 .header-fixed {
-    position: fixed;
+    position: fixed !important;
     top: 0;
-    bottom: auto;
+    bottom: auto !important;
     width: 100%;
 }
 
@@ -558,10 +560,6 @@ header {
         margin-left: 20px;
     }
 
-    ul {
-        gap: 18px;
-    }
-
     .img-logo {
         max-width: 65px;
         max-height: 65px;
@@ -658,10 +656,6 @@ header {
     
     .nav-enlaces {
         margin-left: 10px;
-    }
-
-    ul {
-        gap: 10px;
     }
 
     .img-logo {
@@ -902,8 +896,9 @@ header {
     display: flex;
     flex-direction: column;
     list-style: none;
-    padding: 16px 0; /* Espacio arriba y abajo de la lista */
+    padding: 0;
     margin: 0;
+    margin-top: 12px;
 }
 
 .mobile-menu-nav li {
@@ -918,7 +913,7 @@ header {
 
 .mobile-menu-nav li a {
     display: block;
-    padding: 12px 25px; /* Buen padding para tocar fácilmente */
+    padding: 14px 20px; /* Buen padding para tocar fácilmente */
     color: white;
     text-decoration: none;
     font-size: 1.1rem; /* Tamaño de fuente legible */
@@ -929,6 +924,10 @@ header {
 .mobile-menu-nav li a:focus { /* Estado hover/focus */
     background-color: rgba(255,255,255,0.1);
     color: #f0f0f0;
+}
+
+.mat-icon {
+    margin-right: 12px;
 }
 
 .mobile-menu-nav hr {
@@ -996,3 +995,181 @@ header {
     .titulo-top { font-size: 1.4rem; }
     /* ...otros ajustes ... */
 }
+
+@media (max-width: 300px) {
+
+    .mobile-menu-header {
+        padding: 8px 10px;
+    }
+
+    .mobile-menu-logo {
+        height: 54px;
+        width: auto;
+    }
+
+    .mobile-menu-close {
+        height: 24px;
+        width: auto;
+    }
+
+    .mobile-session-controls .button-iniciar-sesion.mobile {
+        padding: 7px 14px;
+        font-size: 14px;
+        color: white;
+        border: 1px solid white;
+        background-color: transparent;
+    }
+
+}
+
+/* === ESTILOS PARA DROPDOWNS DE ESCRITORIO === */
+.nav-item.dropdown-container {
+  position: relative; /* Para posicionar el dropdown-menu */
+}
+
+a.enlaces.has-dropdown {
+  display: inline-flex; /* Para alinear texto y flecha */
+  align-items: center;
+  cursor: pointer; /* Si se abre con click */
+}
+a.enlaces.has-dropdown .dropdown-arrow {
+  font-size: 20px; /* Tamaño de la flecha */
+  transition: transform 0.2s ease-out;
+}
+a.enlaces.has-dropdown.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu.desktop-dropdown {
+  position: absolute;
+  top: 100%; /* Debajo del enlace padre */
+  left: 0;
+  background-color: #25262d; /* Fondo oscuro para el dropdown */
+  border-radius: 0 0 8px 8px; /* Redondeo solo abajo */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  z-index: 1000; /* Encima de otros elementos */
+  min-width: 220px; /* Ancho mínimo */
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease-out, visibility 0.25s ease-out, transform 0.25s ease-out;
+}
+/* Mostrar con hover o click (manejado por *ngIf y la clase .active) */
+.nav-item.dropdown-container:hover .desktop-dropdown, /* Para hover */
+.dropdown-menu.desktop-dropdown[style*="display: block"], /* Si *ngIf lo muestra */
+.nav-item.dropdown-container .desktop-dropdown { /* Para click si show... es true */
+  /* La visibilidad se controla con *ngIf="show...DropdownDesktop" */
+  /* Para animación con *ngIf, necesitarías @animaciones */
+  /* Este CSS es más para un efecto de hover o un *ngIf simple sin animación CSS directa aquí */
+}
+.dropdown-container:hover .desktop-dropdown, /* Para hover */
+:host ::ng-deep .desktop-dropdown { /* Si show... es true y necesitas ::ng-deep */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+.desktop-dropdown .dropdown-item {
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+  padding: 10px 18px;
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.desktop-dropdown .dropdown-item mat-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  color: #8a91a0; /* Color de icono más sutil */
+}
+.desktop-dropdown .dropdown-item:hover {
+  background-color: #5e3ad4; /* Color primario al hacer hover */
+  color: white;
+}
+.desktop-dropdown .dropdown-item:hover mat-icon {
+  color: white;
+}
+
+.desktop-dropdown .dropdown-loader {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+.desktop-dropdown .dropdown-item-empty {
+  padding: 10px 18px;
+  color: #8a91a0;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+
+/* === ESTILOS PARA SUBMENÚS MÓVILES === */
+.mobile-menu-nav .mobile-nav-item.has-submenu > a.mobile-submenu-trigger {
+  display: flex;
+  justify-content: space-between; /* Para poner la flecha a la derecha */
+  align-items: center;
+  width: 100%;
+  padding: 14px 20px; /* Buen padding */
+}
+.mobile-menu-nav .mobile-nav-item.has-submenu > a.mobile-submenu-trigger span {
+  display: inline-flex; /* Alinear icono y texto del trigger */
+  align-items: center;
+}
+.mobile-menu-nav .mobile-nav-item.has-submenu > a.mobile-submenu-trigger span mat-icon {
+  margin-right: 12px; /* Espacio entre icono y texto del trigger */
+}
+.mobile-menu-nav .mobile-nav-item.has-submenu > a.mobile-submenu-trigger .submenu-arrow {
+  transition: transform 0.25s ease-in-out;
+}
+.mobile-menu-nav .mobile-nav-item.has-submenu > a.mobile-submenu-trigger.active .submenu-arrow {
+  transform: rotate(180deg);
+}
+
+.mobile-menu-nav ul.mobile-submenu {
+  list-style: none;
+  padding-left: 0; /* Quitar padding por defecto */
+  margin: 0;
+  background-color: rgba(0,0,0,0.15); /* Fondo ligeramente diferente para el submenú */
+  /* La altura y opacidad se controlan por la animación @expandCollapse */
+}
+
+.mobile-menu-nav ul.mobile-submenu li a {
+  padding: 14px 20px 14px 40px; /* Más indentación para items de submenú */
+  font-size: 1rem; /* Ligeramente más pequeño que los items principales */
+  color: #d0d0d0; /* Un poco más tenue */
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+}
+.mobile-menu-nav ul.mobile-submenu li a mat-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  color: #a0a0b0;
+}
+.mobile-menu-nav ul.mobile-submenu li a:hover {
+  background-color: rgba(94, 58, 212, 0.2); /* Hover con color primario */
+  color: white;
+}
+.mobile-menu-nav ul.mobile-submenu li a:hover mat-icon {
+    color: white;
+}
+
+.mobile-menu-nav ul.mobile-submenu .submenu-loader {
+  display: flex;
+  justify-content: center;
+  padding: 14px 0;
+}
+.mobile-menu-nav ul.mobile-submenu .submenu-item-empty a {
+  color: #8a91a0;
+  font-style: italic;
+  pointer-events: none; /* No clickeable */
+}
+
+.dropdown-arrow {
+    margin: 0;
+}
+

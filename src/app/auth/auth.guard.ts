@@ -3,13 +3,14 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable, of } from 'rxjs';
 import { map, take, filter, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../servicios/auth.service';
+import { ModalAuthService } from '../servicios/modal-auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private modalAuthService: ModalAuthService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -22,20 +23,35 @@ export class AuthGuard implements CanActivate {
       filter(initialized => initialized === true), // 1. Espera a que AuthService termine su chequeo inicial
       take(1),                                    //    Solo una vez después de que la inicialización se complete
       switchMap(() => {
-        // 2. Una vez AuthService está inicializado, comprobamos si el usuario está logueado
-        console.log('AuthGuard: Auth service initialized. Checking isLoggedIn status...');
-        const isLoggedIn = this.authService.isLoggedIn(); // Llama al método isLoggedIn()
-        console.log('AuthGuard: isLoggedIn status from AuthService:', isLoggedIn);
+        // 2. Una vez AuthService está inicializado, comprobamos el estado de login
+        console.log('AuthGuard: Auth service initialized. Checking user status...');
+        // Es mejor usar el observable user$ para obtener el estado más actual
+        // y asegurar que se basa en la última emisión.
+        return this.authService.user$.pipe(
+          take(1), // Tomar el estado actual del usuario
+          map(user => {
+            const isLoggedIn = !!user; // Convierte el objeto user a booleano
+            console.log('AuthGuard: isLoggedIn status based on user$:', isLoggedIn);
 
-        if (isLoggedIn) {
-          console.log('AuthGuard: Access GRANTED for route:', state.url);
-          return of(true); // Permite el acceso (devuelve Observable<true>)
-        } else {
-          console.warn('AuthGuard: Access DENIED for route:', state.url, '. User is not logged in. Redirecting to login...');
-          // Crea y devuelve un UrlTree para redirigir a la página de login
-          return of(this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } }));
-          // El queryParams es opcional, para redirigir de vuelta después del login
-        }
+            if (isLoggedIn) {
+              console.log('AuthGuard: Access GRANTED for route:', state.url);
+              return true; // Usuario logueado, permitir acceso
+            } else {
+              console.warn('AuthGuard: Access DENIED for route:', state.url, '. User is not logged in. Requesting login modal...');
+
+              // Usuario no logueado:
+              // a. Solicitar abrir el modal de login a través del servicio
+              this.modalAuthService.solicitarAbrirLoginModal();
+
+              // b. Cancelar la navegación actual a la ruta protegida.
+              //    Devolver 'false' cancela la navegación y el usuario se queda
+              //    en la página actual, viendo el modal que AuthComponent abrirá.
+              //    Opcionalmente, puedes redirigir a la home si prefieres:
+              //    return this.router.createUrlTree(['/']);
+              return false;
+            }
+          })
+        );
       })
     );
   }

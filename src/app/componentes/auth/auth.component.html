@@ -14,16 +14,56 @@
             <a routerLink="/"> <!-- Enlace a la home -->
                 <img src="../assets/massfitness_nobackground.webp" alt="MassFitness" class="img-logo" loading="lazy">
             </a>
-            <nav class="nav-enlaces nav-enlaces-desktop"> <!-- Enlaces solo para escritorio -->
+            <nav class="nav-enlaces nav-enlaces-desktop">
                 <ul>
+                    <li><a routerLink="/servicios">Servicios</a></li>
+                    <li class="nav-item dropdown-container"
+                        (mouseenter)="showClasesDropdownDesktop = true" (mouseleave)="showClasesDropdownDesktop = false">
+                    <a class="enlaces has-dropdown" (click)="toggleClasesDropdownDesktop()" [class.active]="showClasesDropdownDesktop">
+                        Clases <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+                    </a>
+                    <div class="dropdown-menu desktop-dropdown" *ngIf="showClasesDropdownDesktop">
+                        <div *ngIf="isLoadingClases" class="dropdown-loader">
+                        <mat-spinner diameter="20"></mat-spinner>
+                        </div>
+                        <a *ngFor="let clase of clasesDisponibles" class="dropdown-item" (click)="navegarADetalle('clase', clase.id)">
+                        <mat-icon *ngIf="clase.tipoIcono">{{clase.tipoIcono}}</mat-icon>
+                        <mat-icon *ngIf="!clase.tipoIcono">fitness_center</mat-icon>
+                        {{ clase.nombre }}
+                        </a>
+                        <div *ngIf="!isLoadingClases && clasesDisponibles.length === 0" class="dropdown-item-empty">
+                        No hay clases.
+                        </div>
+                    </div>
+                    </li>
+
+                    <li class="nav-item dropdown-container"
+                        (mouseenter)="showSalasDropdownDesktop = true" (mouseleave)="showSalasDropdownDesktop = false">
+                    <a class="enlaces has-dropdown" (click)="toggleSalasDropdownDesktop()" [class.active]="showSalasDropdownDesktop">
+                        Espacios <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+                    </a>
+                    <div class="dropdown-menu desktop-dropdown" *ngIf="showSalasDropdownDesktop">
+                        <div *ngIf="isLoadingSalas" class="dropdown-loader">
+                        <mat-spinner diameter="20"></mat-spinner>
+                        </div>
+                        <a *ngFor="let sala of salasDisponibles" class="dropdown-item" (click)="navegarADetalle('sala', sala.id)">
+                        <mat-icon *ngIf="sala.tipoIcono">{{sala.tipoIcono}}</mat-icon>
+                        <mat-icon *ngIf="!sala.tipoIcono">meeting_room</mat-icon>
+                        {{ sala.nombre }}
+                        </a>
+                        <div *ngIf="!isLoadingSalas && salasDisponibles.length === 0" class="dropdown-item-empty">
+                        No hay espacios.
+                        </div>
+                    </div>
+                    </li>
+
                     <li><a routerLink="/boxeo">Boxeo</a></li>
-                    <li><a routerLink="/servicios">Servicios</a></li> <!-- Asumiendo routerLink para servicios -->
-                    <li><a class="enlaces" (click)="scrollToContact('#contacto')">Contacto</a></li>
-                </ul>
-            </nav>
-        </div>
+                    <li><a routerLink="#" (click)="scrollToContact('#contacto')">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
         
-             <div class="session-burger-container"> <!-- Contenedor para botones de sesión (escritorio) y hamburguesa (móvil) -->
+            <div class="session-burger-container"> <!-- Contenedor para botones de sesión (escritorio) y hamburguesa (móvil) -->
                 <div *ngIf="loggedIn" class="mobile-user-info">
                     <span class="user"><a routerLink="/perfil" (click)="closeMenuAndNavigate()">{{ currentUserName }}</a></span>
                 </div>
@@ -35,7 +75,7 @@
                             </button>
                         </li>
                         <li class="user-sesion" *ngIf="loggedIn">
-                            <!-- <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span> -->
+                            <span class="user"><a routerLink="/perfil"> {{ currentUserName }}</a></span>
                             <button (click)="logout()" type="button" class="button-cerrar-sesion">Cerrar sesión</button>
                             <a *ngIf="isAdmin" routerLink="/admin-dashboard" class="enlaces-admin button-admin-panel">Admin Panel</a>
                         </li>
@@ -76,9 +116,60 @@
         <ul>
             <hr *ngIf="loggedIn">
 
-            <li><a routerLink="/boxeo" (click)="closeMenuAndNavigate()">Boxeo</a></li>
+            <!-- DENTRO DE: <nav class="mobile-menu-nav"> <ul> ... </ul> </nav> -->
+
+            <!-- ITEM DE CLASES CON SUBMENÚ MÓVIL -->
+            <li class="mobile-nav-item has-submenu">
+            <a (click)="toggleClasesSubmenuMobile()" class="mobile-submenu-trigger" [class.active]="showClasesSubmenuMobile">
+                <span><mat-icon>class</mat-icon> Clases</span>
+                <mat-icon class="submenu-arrow">{{ showClasesSubmenuMobile ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </a>
+            <ul class="mobile-submenu" [@expandCollapse]="showClasesSubmenuMobile ? 'expanded' : 'collapsed'">
+                <li *ngIf="isLoadingClases" class="submenu-loader"><mat-spinner diameter="25"></mat-spinner></li>
+                <li *ngFor="let clase of clasesDisponibles">
+                <a (click)="navegarADetalle('clase', clase.id)">
+                    <mat-icon *ngIf="clase.tipoIcono">{{clase.tipoIcono}}</mat-icon>
+                    <mat-icon *ngIf="!clase.tipoIcono">fitness_center</mat-icon>
+                    {{ clase.nombre }}
+                </a>
+                </li>
+                <li *ngIf="!isLoadingClases && clasesDisponibles.length === 0" class="submenu-item-empty">
+                <a>No hay clases.</a>
+                </li>
+            </ul>
+            </li>
+
+            <!-- ITEM DE ESPACIOS CON SUBMENÚ MÓVIL -->
+            <li class="mobile-nav-item has-submenu">
+            <a (click)="toggleSalasSubmenuMobile()" class="mobile-submenu-trigger" [class.active]="showSalasSubmenuMobile">
+                <span><mat-icon>sensor_door</mat-icon> Espacios</span>
+                <mat-icon class="submenu-arrow">{{ showSalasSubmenuMobile ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </a>
+            <ul class="mobile-submenu" [@expandCollapse]="showSalasSubmenuMobile ? 'expanded' : 'collapsed'">
+                <li *ngIf="isLoadingSalas" class="submenu-loader"><mat-spinner diameter="25"></mat-spinner></li>
+                <li *ngFor="let sala of salasDisponibles">
+                <a (click)="navegarADetalle('sala', sala.id)">
+                    <mat-icon *ngIf="sala.tipoIcono">{{sala.tipoIcono}}</mat-icon>
+                    <mat-icon *ngIf="!sala.tipoIcono">meeting_room</mat-icon>
+                    {{ sala.nombre }}
+                </a>
+                </li>
+                <li *ngIf="!isLoadingSalas && salasDisponibles.length === 0" class="submenu-item-empty">
+                <a>No hay espacios.</a>
+                </li>
+            </ul>
+            </li>
+
+            <!-- Tus otros enlaces móviles (Servicios, Boxeo, Contacto) -->
+            <li><a routerLink="/servicios" (click)="closeMenuAndNavigate()"><mat-icon>miscellaneous_services</mat-icon>Servicios</a></li>
+            <li><a routerLink="/boxeo" (click)="closeMenuAndNavigate()"><mat-icon>sports_mma</mat-icon>Boxeo</a></li>
+            <li><a (click)="closeMenuAndNavigate('#contacto')"><mat-icon>contact_support</mat-icon>Contacto</a></li>
+
+            <!-- ... (resto de tu menú móvil, hr, botones de sesión, etc.) ... -->
+
+            <!-- <li><a routerLink="/boxeo" (click)="closeMenuAndNavigate()">Boxeo</a></li>
             <li><a routerLink="/servicios" (click)="closeMenuAndNavigate()">Servicios</a></li>
-            <li><a (click)="closeMenuAndNavigate('#contacto')">Contacto</a></li>
+            <li><a (click)="closeMenuAndNavigate('#contacto')">Contacto</a></li> -->
 
             <ng-container *ngIf="loggedIn">
                 <hr>

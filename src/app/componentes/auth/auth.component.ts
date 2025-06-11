@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { AuthService, User } from '../../servicios/auth.service';
 import { filter, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
@@ -9,11 +9,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalAuthService } from 'src/app/servicios/modal-auth.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AdminService, ClaseResumida, SalaResumida } from 'src/app/admin/admin.service';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
+  animations: [ // Animaciones para los dropdowns del menú móvil
+      trigger('expandCollapse', [
+        state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
+        state('expanded', style({ height: '*', opacity: 1 })), // '*' calcula la altura automáticamente
+        transition('expanded <=> collapsed', animate('250ms ease-in-out'))
+      ])
+    ]
 })
 export class AuthComponent implements OnInit, OnDestroy {
   @ViewChild('headerElement') headerRef!: ElementRef;
@@ -50,7 +59,21 @@ export class AuthComponent implements OnInit, OnDestroy {
   private routerSubscription: Subscription | null = null;
   private modalAuthSubscription: Subscription | null = null;
 
-  constructor(private authService: AuthService, private router: Router,  private modalAuthService: ModalAuthService, private snackBar: MatSnackBar) {}
+
+  clasesDisponibles: ClaseResumida[] = [];
+  salasDisponibles: SalaResumida[] = [];
+  isLoadingClases = false;
+  isLoadingSalas = false;
+
+  // Para controlar dropdowns de escritorio (pueden ser hover o click)
+  showClasesDropdownDesktop = false;
+  showSalasDropdownDesktop = false;
+
+  // Para controlar submenús en móvil
+  showClasesSubmenuMobile = false;
+  showSalasSubmenuMobile = false;
+
+  constructor(private authService: AuthService, private router: Router,  private modalAuthService: ModalAuthService, private snackBar: MatSnackBar, private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.userSubscription = this.authService.user$.subscribe(user => {
@@ -92,8 +115,79 @@ export class AuthComponent implements OnInit, OnDestroy {
     // o si carga en la home.
     this.isHomePage = (this.router.url === '/' || this.router.url === '/home');
     this.configureHeaderState(); // true para forzar re-configuración inicial
+    this.cargarListasParaDropdowns();
 
     // Initial state is set by the service constructor calling loadInitialAuthState()
+  }
+
+  cargarListasParaDropdowns(): void {
+    this.isLoadingClases = true;
+    this.adminService.getClasesParaDropdown().subscribe(clases => {
+      this.clasesDisponibles = clases;
+      this.isLoadingClases = false;
+    }, error => {
+      console.error("Error cargando clases para dropdown:", error);
+      this.isLoadingClases = false;
+    });
+
+    this.isLoadingSalas = true;
+    this.adminService.getSalasParaDropdown().subscribe(salas => {
+      this.salasDisponibles = salas;
+      this.isLoadingSalas = false;
+    }, error => {
+      console.error("Error cargando salas para dropdown:", error);
+      this.isLoadingSalas = false;
+    });
+  }
+
+  // --- Métodos para Dropdowns de Escritorio (ejemplo con click) ---
+  toggleClasesDropdownDesktop(): void {
+    this.showClasesDropdownDesktop = !this.showClasesDropdownDesktop;
+    this.showSalasDropdownDesktop = false; // Cierra el otro si está abierto
+  }
+
+  toggleSalasDropdownDesktop(): void {
+    this.showSalasDropdownDesktop = !this.showSalasDropdownDesktop;
+    this.showClasesDropdownDesktop = false; // Cierra el otro
+  }
+
+  // Opcional: cerrar dropdowns si se hace clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Lógica para cerrar dropdowns de escritorio si el clic es fuera de ellos
+    // Necesitarías @ViewChild para los elementos del dropdown y el botón que lo abre
+    // Ejemplo muy simplificado:
+    // if (this.showClasesDropdownDesktop && !this.claseSDropdownElementRef?.nativeElement.contains(event.target)) {
+    //   this.showClasesDropdownDesktop = false;
+    // }
+    // Esta parte puede ser compleja de implementar bien sin ensuciar.
+    // A menudo, para hover no se necesita, y para click se puede gestionar con más cuidado.
+  }
+
+
+  // --- Métodos para Submenús Móviles ---
+  toggleClasesSubmenuMobile(): void {
+    this.showClasesSubmenuMobile = !this.showClasesSubmenuMobile;
+    this.showSalasSubmenuMobile = false; // Cierra el otro si está abierto
+  }
+
+  toggleSalasSubmenuMobile(): void {
+    this.showSalasSubmenuMobile = !this.showSalasSubmenuMobile;
+    this.showClasesSubmenuMobile = false; // Cierra el otro
+  }
+
+  // Navegar a la página de detalle de una clase/sala específica desde el dropdown
+  navegarADetalle(tipo: 'clase' | 'sala', id: number | string): void {
+    this.closeMenuAndNavigate(); // Cierra menú móvil
+    this.showClasesDropdownDesktop = false; // Cierra dropdowns escritorio
+    this.showSalasDropdownDesktop = false;
+
+    // Asume que tienes rutas como /reservar/clases/:id y /reservar/salas/:id
+    if (tipo === 'clase') {
+      this.router.navigate(['/reservar/clase', id]);
+    } else if (tipo === 'sala') {
+      this.router.navigate(['/reservar/sala', id]);
+    }
   }
 
   configureHeaderState() {

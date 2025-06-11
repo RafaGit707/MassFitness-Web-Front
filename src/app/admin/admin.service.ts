@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, delay, map, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../servicios/auth.service';
 import { Horario, DatosCrearReservaClase, DatosCrearReservaEspacio, Reserva } from '../servicios/reserva.service';
@@ -20,6 +20,19 @@ export interface ClaseHorarioDefinido {
   activo?: boolean;
 }
 
+export interface ClaseResumida {
+  id: number | string;
+  nombre: string;
+  // Podrías añadir un icono específico o tipo si quieres
+  tipoIcono?: string; // ej: 'fitness_center', 'sports_mma', 'self_improvement'
+}
+
+export interface SalaResumida {
+  id: number | string;
+  nombre: string;
+  tipoIcono?: string; // ej: 'meeting_room', 'sensor_door'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +40,67 @@ export class AdminService {
   private apiUrl = environment.apiUrl; // Asume que apiUrl es 'http://.../api/' (con / al final)
 
   constructor(private http: HttpClient) { }
+
+
+    /**
+   * Obtiene una lista resumida de clases para usar en dropdowns.
+   * Reutiliza el método getClases() y transforma los datos.
+   */
+  getClasesParaDropdown(): Observable<ClaseResumida[]> {
+    return this.getClases() // Llama a tu método existente que devuelve Observable<Clase[]>
+      .pipe(
+        map(clasesCompletas => clasesCompletas.map(clase => ({ // Transforma Clase a ClaseResumida
+          id: clase.id,
+          nombre: clase.nombre,
+          // Aquí podrías añadir lógica para el tipoIcono si la clase original tiene más info
+          // o si quieres que el icono dependa de más propiedades además del nombre.
+          tipoIcono: this.getIconoParaActividad(clase.nombre, 'clase')
+        }))),
+        tap(clasesResumidas => console.log('Clases para dropdown:', clasesResumidas)),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Obtiene una lista resumida de espacios/salas para usar en dropdowns.
+   * Reutiliza el método getEspacios() y transforma los datos.
+   */
+  getSalasParaDropdown(): Observable<SalaResumida[]> {
+    return this.getEspacios() // Llama a tu método existente que devuelve Observable<Espacio[]>
+      .pipe(
+        map(espaciosCompletos => espaciosCompletos.map(espacio => ({ // Transforma Espacio a SalaResumida
+          id: espacio.id,
+          nombre: espacio.nombre,
+          tipoIcono: this.getIconoParaActividad(espacio.nombre, 'sala')
+        }))),
+        tap(salasResumidas => console.log('Salas para dropdown:', salasResumidas)),
+        catchError(this.handleError)
+      );
+  }
+
+  // Tu método getIconoParaActividad se mantiene igual
+  private getIconoParaActividad(nombre: string, tipo: 'clase' | 'sala'): string {
+    const nombreLower = nombre.toLowerCase();
+    if (tipo === 'clase') {
+      if (nombreLower.includes('boxeo')) return 'sports_mma';
+      if (nombreLower.includes('yoga')) return 'self_improvement';
+      if (nombreLower.includes('pilates')) return 'fitness_center';
+      if (nombreLower.includes('hiit')) return 'directions_run';
+      if (nombreLower.includes('spinning') || nombreLower.includes('ciclo')) return 'pedal_bike';
+      if (nombreLower.includes('zumba') || nombreLower.includes('baile')) return 'music_note';
+      if (nombreLower.includes('funcional')) return 'exercise';
+      if (nombreLower.includes('core')) return 'accessibility_new';
+      return 'fitness_center'; // Icono por defecto para clases
+    } else { // tipo === 'sala'
+      if (nombreLower.includes('musculación')) return 'fitness_center';
+      if (nombreLower.includes('cardio')) return 'monitor_heart';
+      if (nombreLower.includes('polivalente')) return 'meeting_room';
+      if (nombreLower.includes('estudio') && (nombreLower.includes('yoga') || nombreLower.includes('pilates'))) return 'spa';
+      if (nombreLower.includes('spinning') || nombreLower.includes('ciclo')) return 'directions_bike';
+      if (nombreLower.includes('exterior') || nombreLower.includes('outdoor')) return 'outdoor_grill';
+      return 'sensor_door'; // Icono por defecto para salas/espacios
+    }
+  }
 
   // --- Usuarios ---
   getUsuarios(): Observable<User[]> {

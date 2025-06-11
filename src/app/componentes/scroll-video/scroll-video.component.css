@@ -90,53 +90,6 @@ canvas {
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.9);
 }
 
-@media (max-width: 1024px) {
-
-    .parallax-text1 h2 {
-        font-size: 1.5rem;
-    }
-    
-    .parallax-text1 {
-        padding: 40px 60px;
-        margin: 40px;
-    }
-
-    .botones-reserva {
-        gap: 30px;
-    }
-
-    .button-reservar {
-        padding: 7px 11px 7px 11px;
-    }
-}
-
-@media (max-width: 768px) {
-
-    .parallax-text1 {
-        padding: 40px;
-        font-size: 1.1rem;
-        margin: 30px;
-    }
-    
-    .botones-reserva {
-        gap: 20px;
-    }
-
-}
-
-@media (max-width: 480px) {
-    .parallax-text1 {
-        padding: 28px;
-        font-size: 1rem;
-        margin: 14px;
-    }
-
-    .botones-reserva {
-        gap: 14px;
-    }
-
-}
-
 
 
 
@@ -273,37 +226,6 @@ canvas {
   color: white;
 } */
 
-/* Media Queries */
-@media (max-width: 768px) {
-  .parallax-text-block {
-    padding: 25px 30px;
-    font-size: 1rem;
-    margin: 15px;
-    max-width: 90%; /* Ocupa más ancho en móvil */
-  }
-  .parallax-text-block h2 { font-size: 1.5rem; }
-  .sticky-text-center, .sticky-text-left, .sticky-text-right {
-    top: 15vh; /* Más arriba en móvil */
-  }
-  .sticky-text-center {
-    transform: translateY(0); /* Quitar transform si el top es diferente */
-    top: 5vh; /* Ejemplo para centrado en móvil */
-    margin-top: 10vh;
-    margin-bottom: 10vh;
-
-  }
-
-  .botones-reserva {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  .button-reservar {
-    width: 100%;
-    text-align: center;
-    font-size: 0.95rem;
-  }
-}
 
 
 
@@ -420,44 +342,137 @@ canvas {
     right: 0;
 }
 
-/* Media Queries */
+
+
+
+
+
+
+@media (max-width: 1024px) {
+
+    .parallax-text1 h2 {
+        font-size: 1.5rem;
+    }
+    
+    .parallax-text1 {
+        padding: 40px 60px;
+        margin: 40px;
+    }
+
+    .botones-reserva {
+        gap: 30px;
+    }
+
+    .button-reservar {
+        padding: 7px 11px 7px 11px;
+    }
+}
+
+
 @media (max-width: 768px) {
-  .parallax-section {
-    padding: 20px 0;
-    background-position: right calc(100% + var(--scroll-y) * 0.4px);
-  }
-    .parallax-section2 {
-        background-position: center calc(100% + var(--scroll-y) * 0.5px);
-  }
-  .parallax-text-block {
-    padding: 25px;
-    font-size: 1rem;
-    margin: 15px;
-    max-width: calc(100% - 30px); /* Ocupa más ancho */
-  }
-  .parallax-text-block h2 { font-size: 1.6rem; }
-  .parallax-text-block h2 mat-icon { font-size: 1.8rem; height: 1.8rem; width: 1.8rem; }
 
-  .parallax-text-block.text-center-aligned,
-  .parallax-text-block.text-left-aligned,
-  .parallax-text-block.text-right-aligned {
-    top: 10vh !important; /* Todos más arriba en móvil, !important para sobreescribir inline */
-  }
-  .parallax-text-block.text-center-aligned {
-      margin-top: 5vh; /* Espacio adicional para el primer bloque centrado */
-      margin-bottom: 5vh;
-  }
+    .parallax-text1 {
+        padding: 40px;
+        font-size: 1.1rem;
+        margin: 30px;
+    }
+    
+    .botones-reserva {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .button-reservar {
+        width: 100%;
+        text-align: center;
+        font-size: 0.95rem;
+        padding: 12px 20px;
+    }
 
+    .parallax-section {
+        padding: 20px 0;
+        background-position: right calc(100% + var(--scroll-y) * 0.4px);
+    }
+        .parallax-section2 {
+            background-position: center calc(100% + var(--scroll-y) * 0.5px);
+    }
+    .parallax-text-block {
+        padding: 25px;
+        font-size: 1rem;
+        margin: 15px;
+        max-width: calc(100% - 30px); /* Ocupa más ancho */
+    }
+    .parallax-text-block h2 { font-size: 1.6rem; }
+    .parallax-text-block h2 mat-icon { font-size: 1.8rem; height: 1.8rem; width: 1.8rem; }
 
-  .botones-reserva {
-    flex-direction: column;
-    align-items: stretch; /* Botones ocupan todo el ancho del contenedor de texto */
-    gap: 10px;
-  }
-  .button-reservar {
-    width: 100%;
-    text-align: center;
-    font-size: 1rem;
-    padding: 14px 20px; /* Más altos en móvil */
-  }
+    .parallax-text-block.text-center-aligned,
+    .parallax-text-block.text-left-aligned,
+    .parallax-text-block.text-right-aligned {
+        top: 10vh !important; /* Todos más arriba en móvil, !important para sobreescribir inline */
+    }
+    .parallax-text-block.text-center-aligned {
+        margin-top: 5vh; /* Espacio adicional para el primer bloque centrado */
+        margin-bottom: 5vh;
+    }
+
+    /* .parallax-text-block {
+        padding: 25px 30px;
+        font-size: 1rem;
+        margin: 15px;
+        max-width: 90%;
+    } */
+    .parallax-text-block h2 { font-size: 1.5rem; }
+    .sticky-text-center, .sticky-text-left, .sticky-text-right {
+        top: 15vh; /* Más arriba en móvil */
+    }
+    .sticky-text-center {
+        transform: translateY(0); /* Quitar transform si el top es diferente */
+        top: 5vh; /* Ejemplo para centrado en móvil */
+        margin-top: 10vh;
+        margin-bottom: 10vh;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+    .parallax-text1 {
+        padding: 28px;
+        font-size: 1rem;
+        margin: 14px;
+    }
+
+    .botones-reserva {
+        gap: 0;
+    }
+
+    .button-reservar {
+        width: 100%;
+        text-align: center;
+        font-size: 0.95rem;
+        padding: 12px 15px;
+        margin-top: 15px;
+    }
+
+}
+
+@media (max-width: 300px) {
+
+    .parallax-text1 {
+        padding: 24px;
+        margin: 10px;
+    }
+
+    .botones-reserva {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .button-reservar {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+
 }

@@ -16,7 +16,8 @@ body.no-scroll {
     width: 100%;
     height: 100dvh;
     max-width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
+    overflow: visible; 
     z-index: 1;
     justify-content: flex-start;
     align-items: flex-end;
@@ -1173,3 +1174,385 @@ a.enlaces.has-dropdown.active .dropdown-arrow {
     margin: 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* auth.component.css */
+
+/* --- Contenedor Principal de la Home (Hero) --- */
+.container-header {
+  display: flex;
+  position: relative; /* Necesario para el header absolute */
+  width: 100%;
+  height: 100dvh;
+  max-width: 100%;
+  /* QUITAR overflow: hidden; SI ES POSIBLE.
+     Si no, el dropdown del header absoluto (en la home, abajo) SE CORTARÁ.
+     Si lo quitas y aparece scroll horizontal, debes encontrar QUÉ elemento
+     dentro de .container-header lo causa y arreglar ese elemento específico
+     (ej. div-fondo si tiene width > 100% o márgenes extraños). */
+  overflow-x: hidden; /* Para prevenir scroll horizontal si es inevitable */
+  overflow-y: auto;   /* Para permitir scroll si la hero lo necesita */
+  z-index: 1; /* Base */
+  justify-content: flex-start;
+  align-items: flex-end; /* Para que el header (con bottom:0) se alinee abajo */
+  background: none;
+  padding-bottom: var(--header-height);
+}
+
+.div-fondo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* O 100dvh */
+  background-image: url("../../../assets/fondo.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -1; /* Detrás del header y el contenido de la hero */
+  /* overflow: hidden; Si la imagen es más grande y necesitas recortarla aquí */
+}
+
+/* --- Header Principal --- */
+header { /* Corresponde a <header #headerElement> */
+  width: 100%;
+  background-color: #2e2f36;
+  transition: all 0.3s ease-in-out;
+  /* La posición se controla por las clases que añade TS (initially-bottom-on-home / header-fixed) */
+  /* z-index inicial para el header cuando está 'absolute' y no fijo */
+  z-index: 100; /* Debe ser mayor que el z-index de .div-fondo */
+}
+
+/* Estado inicial en la Home (abajo) */
+header.initially-bottom-on-home {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* Estado Fijo (arriba, para otras páginas o después de scroll en home) */
+header.header-fixed {
+  position: fixed !important; /* Important para sobreescribir 'absolute' */
+  top: 0 !important;
+  bottom: auto !important; /* Asegurar que no esté 'bottom:0' */
+  left: 0 !important;
+  z-index: 1010; /* Un z-index muy alto para estar sobre todo */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.topheader {
+  display: flex;
+  width: 100%;
+  /* max-width: 1300px; /* Opcional: un contenedor interno para el contenido del header */
+  /* margin: 0 auto; /* Para centrar si usas max-width */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px; /* Padding del header */
+  position: relative; /* Necesario para el contexto de apilamiento de los dropdowns */
+  z-index: 1; /* Para que el contenido del topheader esté sobre el fondo del header */
+}
+
+
+/* --- Parte Izquierda del Header (Logo y Navegación Principal) --- */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espacio entre logo y nav.nav-enlaces-principales */
+}
+
+.logo-container {
+  flex-shrink: 0; /* Para que el logo no se encoja */
+}
+.img-logo {
+  width: 60px; /* Ajusta */
+  height: auto;
+  display: block;
+}
+
+.nav-enlaces-principales ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 25px; /* Espacio entre "Clases", "Espacios", "Servicios"... */
+  padding: 0;
+  margin: 0;
+}
+.nav-enlaces-principales .enlaces {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500; /* Ligeramente menos bold que los botones */
+  padding: 10px 0; /* Área de click/hover */
+  position: relative;
+  transition: color 0.2s ease;
+}
+.nav-enlaces-principales .enlaces:hover {
+  color: #bfbfbf; /* Un gris claro para hover */
+}
+
+
+/* --- Dropdown de Escritorio --- */
+.nav-item.dropdown-container {
+  position: relative; /* Padre para el dropdown */
+}
+
+.dropdown-menu.desktop-dropdown {
+  position: absolute;
+  left: 0; /* Alineado a la izquierda del <li> por defecto */
+  background-color: #2A2F3C; /* Un poco más oscuro o diferente que el header */
+  border: 1px solid #3a3f4c; /* Borde sutil */
+  border-top: none; /* Si el borde superior lo da el header o el li */
+  border-radius: 0 0 8px 8px; /* Redondeo abajo */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  z-index: 1020; /* ¡MUY IMPORTANTE! Más alto que header.header-fixed */
+  min-width: 250px; /* Ancho del dropdown */
+  padding: 10px 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) scaleY(0.95);
+  transform-origin: top center;
+  transition: opacity 0.2s ease-out, visibility 0s linear 0.2s, transform 0.2s ease-out;
+}
+
+/* Estado por defecto: DESPLIEGA HACIA ABAJO */
+.dropdown-menu.desktop-dropdown:not(.drop-up) {
+  top: 100%; /* Debajo del <li> */
+  border-radius: 0 0 8px 8px;
+  transform-origin: top center;
+}
+
+/* Estado para DESPLEGAR HACIA ARRIBA */
+.dropdown-menu.desktop-dropdown.drop-up {
+  top: auto; /* Quita el top */
+  bottom: calc(100% + 0px); /* Posiciona el borde inferior del dropdown justo encima del <li> */
+                              /* El +0px es para un pequeño espacio si se desea */
+  border-radius: 8px 8px 0 0; /* Redondeo arriba */
+  border-top: 1px solid #3a3f4c; /* Borde superior si antes no tenía */
+  border-bottom: none; /* Quitar borde inferior */
+  transform-origin: bottom center;
+  transform: translateY(-10px) scaleY(0.95); /* Transformación inicial para drop-up */
+}
+
+/* Mostrar el dropdown (cuando el *ngIf es true Y se aplica .dropdown-active O por hover) */
+.nav-item.dropdown-container:hover .dropdown-menu.desktop-dropdown,
+.dropdown-menu.desktop-dropdown.dropdown-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scaleY(1);
+  transition-delay: 0s, 0s, 0s;
+}
+
+.desktop-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #e8eaed;
+  text-decoration: none;
+  font-size: 0.9rem; /* Ligeramente más pequeño */
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.desktop-dropdown .dropdown-item mat-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  color: #9aa0a6;
+  transition: color 0.15s ease-out;
+}
+.desktop-dropdown .dropdown-item:hover {
+  background-color: #5e3ad4;
+  color: white;
+}
+.desktop-dropdown .dropdown-item:hover mat-icon {
+  color: white;
+}
+/* ... (loader y empty state) ... */
+
+
+/* --- Parte Derecha del Header (Sesión y Hamburguesa) --- */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+/* ... (tus estilos para .desktop-user-info, .nav-session, .burger-menu-icon) ... */
+/* ... (tus estilos para .mobile-menu-overlay y modales) ... */
+
+/* Media Queries: Mantener la lógica de ocultar/mostrar */
+@media (max-width: 880px) { /* O tu breakpoint */
+  .nav-enlaces-principales.nav-enlaces-desktop,
+  .nav-session-desktop,
+  .desktop-user-info {
+    display: none !important;
+  }
+  .burger-menu-icon {
+    display: flex !important;
+  }
+  .header-left {
+    gap: 0; /* Solo el logo */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* auth.component.css */
+
+.container-header {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100dvh; /* Tu hero section */
+  max-width: 100%;
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+  /* !!! ESTA ES LA LÍNEA MÁS IMPORTANTE PARA EL PROBLEMA DEL CORTE !!! */
+  /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+  overflow: visible; 
+  /* <--- CAMBIO CRUCIAL: Permite que los hijos se desborden */
+                      /* Si esto causa una barra de scroll HORIZONTAL, significa que
+                         ALGO DENTRO de .container-header (probablemente .div-fondo o .img-titulo)
+                         es más ancho que el 100% del viewport. DEBES ARREGLAR ESO.
+                         Ej. .div-fondo { width: 100%; height: 100%; overflow: hidden; }
+                         NO PONGAS overflow:hidden aquí si el header y su dropdown están dentro.
+                      */
+  z-index: 1; /* Base para el contexto de apilamiento */
+  justify-content: flex-start;
+  align-items: flex-end;
+  background: none; /* El fondo lo da .div-fondo */
+}
+
+.div-fondo { /* Tu imagen de fondo de la hero */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Debe ser 100% del viewport, no más */
+  height: 100%; /* O 100dvh */
+  background-image: url("../../../assets/fondo.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Opcional */
+  z-index: -1; /* Detrás de todo el contenido de .container-header */
+  /* Si esta imagen es la que se desborda, aplica overflow:hidden aquí
+     o asegúrate que background-size:cover la contenga bien. */
+}
+
+header { /* Tu <header #headerElement> */
+  width: 100%;
+  background-color: #2e2f36;
+  transition: all 0.3s ease-in-out;
+  z-index: 100; /* Por encima de .div-fondo y .img-titulo, pero debajo del dropdown */
+                /* cuando el dropdown usa position:fixed */
+}
+
+/* Estado inicial en la Home (abajo) */
+header.initially-bottom-on-home {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* Estado Fijo (arriba, para otras páginas o después de scroll en home) */
+header.header-fixed {
+  position: fixed !important;
+  top: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  z-index: 1010; /* Más alto para estar sobre el contenido de la página */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.topheader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  position: relative; /* Para posicionar dropdowns hijos */
+  z-index: 1; /* Contenido del topheader sobre el fondo del <header> */
+}
+
+/* ... (tus estilos para .header-left, .logo-container, .nav-enlaces-principales) ... */
+
+.nav-item.dropdown-container {
+  position: relative; /* Necesario para posicionar el dropdown */
+}
+
+.dropdown-menu.desktop-dropdown {
+  position: absolute; /* Por defecto, se posiciona relativo al .nav-item */
+  left: 0;
+  background-color: #2A2F3C;
+  border: 1px solid #3a3f4c;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  /* z-index: 1050; Alto para estar sobre todo cuando es 'absolute' Y cuando es 'fixed' */
+  /* Cuando el dropdown cambia a position:fixed, su z-index se compara
+     con otros elementos fixed y con el contexto de apilamiento del body. */
+  z-index: 1020; /* Suficientemente alto */
+  min-width: 250px;
+  padding: 10px 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) scaleY(0.95);
+  transition: opacity 0.2s ease-out, visibility 0s linear 0.2s, transform 0.2s ease-out;
+}
+
+/* DESPLIEGA HACIA ABAJO (por defecto, o cuando header está fijo y hay espacio) */
+.dropdown-menu.desktop-dropdown:not(.drop-up) {
+  top: 100%; /* Debajo del <li> */
+  transform-origin: top center;
+  border-radius: 0 0 8px 8px; /* Solo abajo si top:100% */
+}
+
+/* DESPLIEGA HACIA ARRIBA (cuando header está fijo y NO hay espacio abajo, O cuando header está abajo en home) */
+.dropdown-menu.desktop-dropdown.drop-up {
+  top: auto;
+  bottom: 100%; /* El borde inferior del dropdown se alinea con el borde superior del <li> */
+  border-radius: 8px 8px 0 0; /* Solo arriba si bottom:100% */
+  transform-origin: bottom center;
+  transform: translateY(-10px) scaleY(0.95); /* Animación desde abajo */
+}
+
+/* Mostrar el dropdown */
+.nav-item.dropdown-container:hover .dropdown-menu.desktop-dropdown,
+.dropdown-menu.desktop-dropdown.dropdown-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scaleY(1);
+  transition-delay: 0s, 0s, 0s;
+}
+
+/* Clase para cuando el dropdown NECESITA ser position:fixed
+   (esto es para el caso donde el header está en la home, abajo,
+   y el .container-header SÍ tiene overflow:hidden y no se puede quitar)
+   NOTA: Esta es una solución de último recurso si no puedes arreglar el overflow.
+*/
+.dropdown-menu.desktop-dropdown.force-fixed-position {
+  position: fixed;
+  /* top, left, bottom serán aplicados por [style] desde TS */
+  /* el transform-origin y transform inicial ya están en .drop-up (asumimos que siempre va up) */
+}

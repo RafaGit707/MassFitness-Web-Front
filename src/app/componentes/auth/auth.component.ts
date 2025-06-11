@@ -65,13 +65,17 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoadingClases = false;
   isLoadingSalas = false;
 
-  // Para controlar dropdowns de escritorio (pueden ser hover o click)
   showClasesDropdownDesktop = false;
   showSalasDropdownDesktop = false;
 
-  // Para controlar submenús en móvil
   showClasesSubmenuMobile = false;
   showSalasSubmenuMobile = false;
+
+  @ViewChild('clasesDropdownContainer') clasesDropdownContainerRef!: ElementRef<HTMLElement>;
+  @ViewChild('salasDropdownContainer') salasDropdownContainerRef!: ElementRef<HTMLElement>;
+
+  isClasesDropUp = false;
+  isSalasDropUp = false;
 
   constructor(private authService: AuthService, private router: Router,  private modalAuthService: ModalAuthService, private snackBar: MatSnackBar, private adminService: AdminService) {}
 
@@ -140,16 +144,123 @@ export class AuthComponent implements OnInit, OnDestroy {
     });
   }
 
-  // --- Métodos para Dropdowns de Escritorio (ejemplo con click) ---
-  toggleClasesDropdownDesktop(): void {
-    this.showClasesDropdownDesktop = !this.showClasesDropdownDesktop;
-    this.showSalasDropdownDesktop = false; // Cierra el otro si está abierto
+   // --- Métodos para Dropdowns de Escritorio ---
+  private configureDropdown(
+    triggerElement: HTMLElement,
+    dropdownMenuElement: HTMLElement | null, // El div.dropdown-menu
+    isToShow: boolean,
+    dropUpFlagSetter: (isDropUp: boolean) => void
+  ): void {
+    if (!dropdownMenuElement) {
+      // Si el menú aún no está en el DOM (por *ngIf), no podemos calcular
+      // Pero si isToShow es false, no importa. Si es true, el setTimeout lo manejará.
+      if (!isToShow) dropUpFlagSetter(false); // Resetear al ocultar
+      return;
+    }
+
+    if (!isToShow) {
+      dropUpFlagSetter(false); // Resetear al ocultar
+      return;
+    }
+
+    // Forzar al navegador a recalcular layout para obtener dimensiones correctas
+    // Esto es importante si el dropdown acaba de ser añadido al DOM por *ngIf
+    dropdownMenuElement.style.visibility = 'hidden'; // Ocultar temporalmente para medir
+    dropdownMenuElement.style.display = 'block'; // Asegurar que esté en el flujo para medir
+    const dropdownHeight = dropdownMenuElement.offsetHeight;
+    dropdownMenuElement.style.display = ''; // Restaurar
+    dropdownMenuElement.style.visibility = ''; // Restaurar
+
+
+    const triggerRect = triggerElement.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    const spaceBelow = windowHeight - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+
+    // Decidir si desplegar hacia arriba
+    // Se despliega hacia arriba si:
+    // 1. No hay suficiente espacio abajo (spaceBelow < dropdownHeight)
+    // 2. Y (hay más espacio arriba que abajo O hay suficiente espacio arriba para el dropdown)
+    if (spaceBelow < dropdownHeight && (spaceAbove > spaceBelow || spaceAbove >= dropdownHeight)) {
+      dropUpFlagSetter(true);
+    } else {
+      dropUpFlagSetter(false);
+    }
   }
 
-  toggleSalasDropdownDesktop(): void {
-    this.showSalasDropdownDesktop = !this.showSalasDropdownDesktop;
-    this.showClasesDropdownDesktop = false; // Cierra el otro
+  // Al entrar/salir del contenedor del item de navegación que tiene el dropdown
+  onDropdownContainerMouseEnter(event: MouseEvent, type: 'clases' | 'salas'): void {
+    const triggerLiElement = event.currentTarget as HTMLElement;
+    let dropdownMenuElement: HTMLElement | null = null;
+
+    if (type === 'clases') {
+      this.showClasesDropdownDesktop = true;
+      // Esperar un ciclo para que *ngIf renderice el dropdown
+      setTimeout(() => {
+        dropdownMenuElement = triggerLiElement.querySelector('.dropdown-menu[data-type="clases"]') as HTMLElement | null;
+        this.configureDropdown(triggerLiElement, dropdownMenuElement, true, (isUp) => this.isClasesDropUp = isUp);
+      }, 0);
+    } else if (type === 'salas') {
+      this.showSalasDropdownDesktop = true;
+      setTimeout(() => {
+        dropdownMenuElement = triggerLiElement.querySelector('.dropdown-menu[data-type="salas"]') as HTMLElement | null;
+        this.configureDropdown(triggerLiElement, dropdownMenuElement, true, (isUp) => this.isSalasDropUp = isUp);
+      }, 0);
+    }
   }
+
+  onDropdownContainerMouseLeave(type: 'clases' | 'salas'): void {
+    if (type === 'clases') {
+      this.showClasesDropdownDesktop = false;
+      // No es necesario resetear isClasesDropUp aquí, se recalcula al mostrar
+    } else if (type === 'salas') {
+      this.showSalasDropdownDesktop = false;
+    }
+  }
+
+
+  // Si prefieres controlar con CLICK en lugar de hover para mostrar/ocultar
+  toggleClasesDropdownDesktop(event: MouseEvent): void {
+    const triggerLiElement = (event.currentTarget as HTMLElement).closest('.nav-item.dropdown-container') as HTMLElement;
+    this.showSalasDropdownDesktop = false;
+    this.showClasesDropdownDesktop = !this.showClasesDropdownDesktop;
+
+    if (this.showClasesDropdownDesktop) {
+      setTimeout(() => {
+        const dropdownMenuElement = triggerLiElement.querySelector('.dropdown-menu[data-type="clases"]') as HTMLElement | null;
+        this.configureDropdown(triggerLiElement, dropdownMenuElement, true, (isUp) => this.isClasesDropUp = isUp);
+      }, 0);
+    } else {
+        this.isClasesDropUp = false; // Resetear al cerrar
+    }
+  }
+
+  toggleSalasDropdownDesktop(event: MouseEvent): void {
+    const triggerLiElement = (event.currentTarget as HTMLElement).closest('.nav-item.dropdown-container') as HTMLElement;
+    this.showClasesDropdownDesktop = false;
+    this.showSalasDropdownDesktop = !this.showSalasDropdownDesktop;
+
+    if (this.showSalasDropdownDesktop) {
+      setTimeout(() => {
+        const dropdownMenuElement = triggerLiElement.querySelector('.dropdown-menu[data-type="salas"]') as HTMLElement | null;
+        this.configureDropdown(triggerLiElement, dropdownMenuElement, true, (isUp) => this.isSalasDropUp = isUp);
+      }, 0);
+    } else {
+        this.isSalasDropUp = false; // Resetear al cerrar
+    }
+  }
+
+  // --- Métodos para Dropdowns de Escritorio (ejemplo con click) ---
+  // toggleClasesDropdownDesktop(): void {
+  //   this.showClasesDropdownDesktop = !this.showClasesDropdownDesktop;
+  //   this.showSalasDropdownDesktop = false; // Cierra el otro si está abierto
+  // }
+
+  // toggleSalasDropdownDesktop(): void {
+  //   this.showSalasDropdownDesktop = !this.showSalasDropdownDesktop;
+  //   this.showClasesDropdownDesktop = false; // Cierra el otro
+  // }
 
   // Opcional: cerrar dropdowns si se hace clic fuera
   @HostListener('document:click', ['$event'])

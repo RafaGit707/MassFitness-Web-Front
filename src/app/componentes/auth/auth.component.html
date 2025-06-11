@@ -16,7 +16,7 @@
             </a>
             <nav class="nav-enlaces nav-enlaces-desktop">
                 <ul>
-                    <li><a routerLink="/servicios">Servicios</a></li>
+                    <!-- <li><a routerLink="/servicios">Servicios</a></li>
                     <li class="nav-item dropdown-container"
                         (mouseenter)="showClasesDropdownDesktop = true" (mouseleave)="showClasesDropdownDesktop = false">
                     <a class="enlaces has-dropdown" (click)="toggleClasesDropdownDesktop()" [class.active]="showClasesDropdownDesktop">
@@ -55,6 +55,50 @@
                         No hay espacios.
                         </div>
                     </div>
+                    </li> -->
+
+                     <li #clasesDropdownContainer class="nav-item dropdown-container"
+                     (mouseenter)="onDropdownContainerMouseEnter($event, 'clases')"
+                     (mouseleave)="onDropdownContainerMouseLeave('clases')">
+                        <a class="enlaces has-dropdown" (click)="toggleClasesDropdownDesktop($event)" [class.active]="showClasesDropdownDesktop">
+                            Clases <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+                        </a>
+                        <div class="dropdown-menu desktop-dropdown"
+                            data-type="clases"
+                            *ngIf="showClasesDropdownDesktop"
+                            [class.dropdown-active]="showClasesDropdownDesktop"
+                            [class.drop-up]="isClasesDropUp">
+                            <a *ngFor="let clase of clasesDisponibles" class="dropdown-item" (click)="navegarADetalle('clase', clase.id)">
+                                <mat-icon *ngIf="clase.tipoIcono">{{clase.tipoIcono}}</mat-icon>
+                                <mat-icon *ngIf="!clase.tipoIcono">fitness_center</mat-icon>
+                                {{ clase.nombre }}
+                            </a>
+                            <div *ngIf="!isLoadingClases && clasesDisponibles.length === 0" class="dropdown-item-empty">
+                            No hay clases.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li #salasDropdownContainer class="nav-item dropdown-container"
+                        (mouseenter)="onDropdownContainerMouseEnter($event, 'salas')"
+                        (mouseleave)="onDropdownContainerMouseLeave('salas')">
+                        <a class="enlaces has-dropdown" (click)="toggleSalasDropdownDesktop($event)" [class.active]="showSalasDropdownDesktop">
+                            Espacios <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+                        </a>
+                        <div class="dropdown-menu desktop-dropdown"
+                            data-type="salas"
+                            *ngIf="showSalasDropdownDesktop"
+                            [class.dropdown-active]="showSalasDropdownDesktop"
+                            [class.drop-up]="isSalasDropUp">
+                            <a *ngFor="let sala of salasDisponibles" class="dropdown-item" (click)="navegarADetalle('sala', sala.id)">
+                                <mat-icon *ngIf="sala.tipoIcono">{{sala.tipoIcono}}</mat-icon>
+                                <mat-icon *ngIf="!sala.tipoIcono">meeting_room</mat-icon>
+                                {{ sala.nombre }}
+                            </a>
+                            <div *ngIf="!isLoadingSalas && salasDisponibles.length === 0" class="dropdown-item-empty">
+                                No hay espacios.
+                            </div>
+                        </div>
                     </li>
 
                     <li><a routerLink="/boxeo">Boxeo</a></li>
